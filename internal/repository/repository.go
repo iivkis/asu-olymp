@@ -3,7 +3,7 @@ package repository
 import "gorm.io/gorm"
 
 type Repository struct {
-	Users *users
+	Users *UsersRepository
 }
 
 func NewRepository() (r *Repository) {
@@ -17,7 +17,7 @@ func NewRepository() (r *Repository) {
 
 	//combine
 	return &Repository{
-		Users: &users{db: db},
+		Users: NewUsersRepository(db),
 	}
 }
 

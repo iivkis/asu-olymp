@@ -33,23 +33,39 @@ func (m *UserModel) BeforeUpdate(tx *gorm.DB) error {
 		}
 		m.Password = string(b)
 	}
-
 	return nil
 }
 
-type users struct {
+type UsersRepository struct {
 	db *gorm.DB
 }
 
-func (r *users) Create(model *UserModel) error {
+func NewUsersRepository(db *gorm.DB) *UsersRepository {
+	return &UsersRepository{db: db}
+}
+
+func (r *UsersRepository) Create(model *UserModel) error {
 	return r.db.Create(model).Error
 }
 
-func (r *users) First(where *UserModel) (model *UserModel, err error) {
-	err = r.db.Where(where).First(model).Error
+func (r *UsersRepository) First(where *UserModel) (model *UserModel, err error) {
+	err = r.db.Where(where).First(&model).Error
 	return
 }
 
-func (r *users) Exists(where *UserModel) bool {
+func (r *UsersRepository) Exists(where *UserModel) bool {
 	return r.db.Select("id").Where(where).First(&UserModel{}).Error == nil
+}
+
+func (r *UsersRepository) SignUpByEmail(email string, password string) (model *UserModel, err error) {
+	user, err := r.First(&UserModel{Email: email})
+	if err != nil {
+		return nil, err
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }

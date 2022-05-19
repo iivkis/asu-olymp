@@ -1,15 +1,16 @@
 package controllerV1
 
-import "github.com/iivkis/asu-olymp/internal/repository"
+import (
+	authjwt "github.com/iivkis/asu-olymp/internal/auth_jwt"
+	"github.com/iivkis/asu-olymp/internal/repository"
+)
 
 type ControllerV1 struct {
-	Ping *ping
-	Auth *auth
+	Auth *AuthController
 }
 
-func NewControllerV1(repository *repository.Repository) *ControllerV1 {
+func NewControllerV1(repository *repository.Repository, authjwt *authjwt.AuthJWT) *ControllerV1 {
 	return &ControllerV1{
-		Ping: newPing(),
-		Auth: newAuth(repository),
+		Auth: NewAuthController(repository, authjwt),
 	}
 }
