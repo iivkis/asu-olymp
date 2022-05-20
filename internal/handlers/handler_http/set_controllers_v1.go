@@ -15,6 +15,6 @@ func (h *HandlerHttp) setControllersV1(router *gin.RouterGroup, c *controllerV1.
 	//TASKS
 	{
 		router := router.Group("tasks")
-		router.GET("/", c.Tasks.Get)
+		router.GET("/", c.Middleware.WithBearer(false), c.Tasks.Get)
 	}
 }

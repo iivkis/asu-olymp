@@ -23,10 +23,9 @@ func (c *MiddlewareController) WithBearer(mandatory bool) func(ctx *gin.Context)
 				return
 			}
 			ctx.Set("user_claims", claims)
-		} else if !mandatory {
-			ctx.Set("user_claims", &authjwt.UserClaims{})
-		} else {
+		} else if mandatory {
 			ctx.AbortWithStatus(401)
+			return
 		}
 	}
 }
