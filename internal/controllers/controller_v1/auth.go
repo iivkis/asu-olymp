@@ -76,10 +76,10 @@ func (c *AuthController) SignIn(ctx *gin.Context) {
 	claims := authjwt.UserClaims{
 		ID: user.ID,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: 1000,
-			Issuer:    "asu-olymp",
+			Issuer: "asu-olymp",
 		},
 	}
+
 	token, err := c.authjwt.GenerateUserToken(&claims)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, ErrServer)

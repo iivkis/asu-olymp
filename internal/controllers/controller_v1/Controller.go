@@ -6,11 +6,15 @@ import (
 )
 
 type ControllerV1 struct {
-	Auth *AuthController
+	Auth       *AuthController
+	Tasks      *TasksController
+	Middleware *MiddlewareController
 }
 
 func NewControllerV1(repository *repository.Repository, authjwt *authjwt.AuthJWT) *ControllerV1 {
 	return &ControllerV1{
-		Auth: NewAuthController(repository, authjwt),
+		Auth:       NewAuthController(repository, authjwt),
+		Tasks:      NewTasksController(repository),
+		Middleware: NewMiddlewareController(authjwt),
 	}
 }
