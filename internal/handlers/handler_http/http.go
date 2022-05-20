@@ -2,11 +2,11 @@ package handlerHTTP
 
 import (
 	"github.com/gin-gonic/gin"
-	cv1 "github.com/iivkis/asu-olymp/internal/controllers/controller_v1"
+	controllerV1 "github.com/iivkis/asu-olymp/internal/controllers/controller_v1"
 )
 
 type Config struct {
-	ControllerV1 *cv1.ControllerV1
+	ControllerV1 *controllerV1.ControllerV1
 }
 
 type HandlerHttp struct {
