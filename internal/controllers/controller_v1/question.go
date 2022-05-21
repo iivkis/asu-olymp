@@ -1,6 +1,7 @@
 package controllerV1
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +17,7 @@ func NewQuestionsController(repository *repository.Repository) *QuestionsControl
 }
 
 type QuestionsGetQuery struct {
-	TaskID uint `json:"task_id" binding:"min=0"`
+	TaskID uint `form:"task_id" binding:"min=0"`
 }
 
 func (c *QuestionsController) Get(ctx *gin.Context) {
@@ -25,6 +26,8 @@ func (c *QuestionsController) Get(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
 		return
 	}
+
+	fmt.Println(query.TaskID)
 
 	models, err := c.repository.Questions.Find(&repository.QuestionModel{TaskID: query.TaskID}, getPayload(ctx))
 	if err != nil {
