@@ -44,13 +44,8 @@ func NewUsersRepository(db *gorm.DB) *UsersRepository {
 	return &UsersRepository{db: db}
 }
 
-func (r *UsersRepository) Create(model *UserModel) error {
-	return r.db.Create(model).Error
-}
-
-func (r *UsersRepository) First(where *UserModel) (model *UserModel, err error) {
-	err = r.db.Where(where).First(&model).Error
-	return
+func (c *UsersRepository) Cursor() *gorm.DB {
+	return c.db.Model(&UserModel{})
 }
 
 func (r *UsersRepository) Exists(where *UserModel) bool {
@@ -58,14 +53,9 @@ func (r *UsersRepository) Exists(where *UserModel) bool {
 }
 
 func (r *UsersRepository) SignUpByEmail(email string, password string) (model *UserModel, err error) {
-	user, err := r.First(&UserModel{Email: email})
-	if err != nil {
-		return nil, err
+	if err = r.db.First(&model, &UserModel{Email: email}).Error; err != nil {
+		return
 	}
-
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
-		return nil, err
-	}
-
-	return user, nil
+	err = bcrypt.CompareHashAndPassword([]byte(model.Password), []byte(password))
+	return
 }

@@ -43,7 +43,7 @@ func (c *AuthController) SignUp(ctx *gin.Context) {
 		Password: body.Password,
 	}
 
-	if err := c.repository.Users.Create(&model); err != nil {
+	if err := c.repository.Users.Cursor().Create(&model).Error; err != nil {
 		ctx.JSON(http.StatusInternalServerError, inWrap(ErrServer.Add(err.Error())))
 		return
 	}
