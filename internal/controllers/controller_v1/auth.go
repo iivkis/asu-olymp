@@ -28,12 +28,12 @@ type authSignUpBody struct {
 func (c *AuthController) SignUp(ctx *gin.Context) {
 	var body authSignUpBody
 	if err := ctx.ShouldBindJSON(&body); err != nil {
-		ctx.JSON(http.StatusBadRequest, newWrap(ErrIncorrectData.Add(err.Error())))
+		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
 		return
 	}
 
 	if c.repository.Users.Exists(&repository.UserModel{Email: body.Email}) {
-		ctx.JSON(http.StatusBadRequest, newWrap(ErrEmailRegistred))
+		ctx.JSON(http.StatusBadRequest, inWrap(ErrEmailRegistred))
 		return
 	}
 
@@ -44,11 +44,11 @@ func (c *AuthController) SignUp(ctx *gin.Context) {
 	}
 
 	if err := c.repository.Users.Create(&model); err != nil {
-		ctx.JSON(http.StatusInternalServerError, newWrap(ErrServer.Add(err.Error())))
+		ctx.JSON(http.StatusInternalServerError, inWrap(ErrServer.Add(err.Error())))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, newWrap(model.ID))
+	ctx.JSON(http.StatusOK, inWrap(model.ID))
 }
 
 type authSignInBody struct {
@@ -63,13 +63,13 @@ type authSignInOut struct {
 func (c *AuthController) SignIn(ctx *gin.Context) {
 	var body authSignInBody
 	if err := ctx.ShouldBindJSON(&body); err != nil {
-		ctx.JSON(http.StatusBadRequest, newWrap(ErrIncorrectData.Add(err.Error())))
+		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
 		return
 	}
 
 	user, err := c.repository.Users.SignUpByEmail(body.Email, body.Password)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, newWrap(ErrIncorrectData))
+		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData))
 		return
 	}
 
@@ -87,7 +87,7 @@ func (c *AuthController) SignIn(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, newWrap(authSignInOut{
+	ctx.JSON(http.StatusOK, inWrap(authSignInOut{
 		Token: token,
 	}))
 }

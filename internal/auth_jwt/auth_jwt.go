@@ -1,8 +1,6 @@
 package authjwt
 
 import (
-	"fmt"
-
 	"github.com/golang-jwt/jwt"
 )
 
@@ -22,7 +20,6 @@ func (j *AuthJWT) GenerateUserToken(claims *UserClaims) (string, error) {
 
 func (j *AuthJWT) ParseUserToken(t string) (claims *UserClaims, err error) {
 	token, err := jwt.ParseWithClaims(t, &UserClaims{}, func(t *jwt.Token) (interface{}, error) {
-		fmt.Println(2)
 		return j.secret, nil
 	})
 	if err != nil {

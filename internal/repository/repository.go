@@ -26,6 +26,6 @@ func NewRepository() (r *Repository) {
 func migration(db *gorm.DB) error {
 	return db.AutoMigrate(
 		&UserModel{},
-		&TasksRepository{},
+		&TaskModel{},
 	)
 }

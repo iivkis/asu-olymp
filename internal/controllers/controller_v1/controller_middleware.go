@@ -19,7 +19,7 @@ func (c *MiddlewareController) WithBearer(mandatory bool) func(ctx *gin.Context)
 		if token != "" {
 			claims, err := c.authjwt.ParseUserToken(token)
 			if err != nil {
-				ctx.AbortWithStatusJSON(401, newWrap(ErrIncorrectData.Add(err.Error())))
+				ctx.AbortWithStatusJSON(401, inWrap(ErrIncorrectData.Add(err.Error())))
 				return
 			}
 			ctx.Set("user_claims", claims)
