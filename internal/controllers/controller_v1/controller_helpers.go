@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	authjwt "github.com/iivkis/asu-olymp/internal/auth_jwt"
+	"github.com/iivkis/asu-olymp/internal/repository"
 )
 
 /*default output struct*/
@@ -27,10 +28,14 @@ func inWrap(data interface{}) *wrap {
 	return w
 }
 
-/*get claims from ctx*/
+/*getters from ctx*/
 func getUserClaims(ctx *gin.Context) (*authjwt.UserClaims, bool) {
 	val, ok := ctx.Get("user_claims")
 	return val.(*authjwt.UserClaims), ok
+}
+
+func getPayload(ctx *gin.Context) *repository.Payload {
+	return ctx.MustGet("payload").(*repository.Payload)
 }
 
 /*validator*/

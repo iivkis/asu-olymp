@@ -15,9 +15,11 @@ func (h *HandlerHttp) setControllersV1(router *gin.RouterGroup, c *controllerV1.
 	//TASKS
 	{
 		router := router.Group("tasks")
+		router.Use(c.Middleware.Payload)
 
-		router.GET("", c.Middleware.WithBearer(false), c.Tasks.Get)
-		router.POST("", c.Middleware.WithBearer(true), c.Tasks.Post)
-		router.PUT("/:id", c.Middleware.WithBearer(true), c.Tasks.Put)
+		router.GET("", c.Middleware.Bearer(false), c.Tasks.Get)
+		router.GET("/:id", c.Middleware.Bearer(false), c.Tasks.GetByID)
+		router.POST("", c.Middleware.Bearer(true), c.Tasks.Post)
+		router.PUT("/:id", c.Middleware.Bearer(true), c.Tasks.Put)
 	}
 }
