@@ -32,6 +32,10 @@ func (r *QuestionsRepository) Find(where *QuestionModel, payload *Payload) (mode
 	return
 }
 
+func (r *QuestionsRepository) Update(where *QuestionModel, fields map[string]interface{}) error {
+	return r.db.Model(&QuestionModel{}).Where(where).Updates(fields).Error
+}
+
 func (r *QuestionsRepository) Exists(where *QuestionModel) bool {
 	return r.db.Select("id").First(&QuestionModel{}, where).Error == nil
 }

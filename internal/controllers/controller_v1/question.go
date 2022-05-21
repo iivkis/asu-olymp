@@ -1,8 +1,8 @@
 package controllerV1
 
 import (
-	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/iivkis/asu-olymp/internal/repository"
@@ -26,8 +26,6 @@ func (c *QuestionsController) Get(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
 		return
 	}
-
-	fmt.Println(query.TaskID)
 
 	models, err := c.repository.Questions.Find(&repository.QuestionModel{TaskID: query.TaskID}, getPayload(ctx))
 	if err != nil {
@@ -69,4 +67,50 @@ func (c *QuestionsController) Post(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusCreated, inWrap(DefaultOut{ID: model.ID}))
+}
+
+type QuestionsPutBody struct {
+	Text *string `json:"text"`
+}
+
+func (c *QuestionsController) Put(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
+		return
+	}
+
+	claims, _ := getUserClaims(ctx)
+
+	if !c.repository.Questions.Exists(&repository.QuestionModel{ID: uint(id), AuthorID: claims.ID}) {
+		ctx.JSON(http.StatusNotFound, inWrap(ErrRecordNotFound))
+		return
+	}
+
+	var body QuestionsPutBody
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
+		return
+	}
+
+	fields := map[string]interface{}{
+		"text": body.Text,
+	}
+
+	if err := validator(fields, validatorRules{
+		"text": func(val interface{}) bool {
+			l := len(*val.(*string))
+			return l > 1 && l < 1000
+		},
+	}); err != nil {
+		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
+		return
+	}
+
+	if err := c.repository.Questions.Update(&repository.QuestionModel{ID: uint(id)}, fields); err != nil {
+		ctx.JSON(http.StatusInternalServerError, inWrap(ErrServer))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, inWrap(DefaultOut{ID: uint(id)}))
 }
