@@ -10,13 +10,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type TaskOut struct {
-	ID      uint   `json:"id"`
-	Title   string `json:"title"`
-	Content string `json:"content"`
-	Author  uint   `json:"author"`
-}
-
 type TasksController struct {
 	repository *repository.Repository
 }
@@ -33,7 +26,6 @@ func (c *TasksController) Get(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, inWrap(ErrServer))
 		return
 	}
-
 	ctx.JSON(http.StatusOK, inWrap(models))
 }
 

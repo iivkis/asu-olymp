@@ -22,4 +22,22 @@ func (h *HandlerHttp) setControllersV1(router *gin.RouterGroup, c *controllerV1.
 		router.POST("", c.Middleware.Bearer(true), c.Tasks.Post)
 		router.PUT("/:id", c.Middleware.Bearer(true), c.Tasks.Put)
 	}
+
+	//QUESTIONS
+	{
+		router := router.Group("questions")
+		router.Use(c.Middleware.Payload)
+
+		router.GET("", c.Middleware.Bearer(false), c.Questions.Get)
+		router.POST("", c.Middleware.Bearer(true), c.Questions.Post)
+	}
+
+	//ANSWERS
+	{
+		router := router.Group("answers")
+		router.Use(c.Middleware.Payload)
+
+		router.GET("", c.Middleware.Bearer(true), c.Answers.Get)
+		router.POST("", c.Middleware.Bearer(true), c.Answers.Post)
+	}
 }

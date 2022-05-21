@@ -3,7 +3,8 @@ package repository
 import "gorm.io/gorm"
 
 type TaskModel struct {
-	ID       uint   `gorm:"index:,unique" json:"id"`
+	ID uint `gorm:"index:,unique" json:"id"`
+
 	Title    string `gorm:"size:200" json:"title"`
 	Content  string `gorm:"size:2000" json:"content"`
 	AuthorID uint   `json:"author_id"`
@@ -30,4 +31,8 @@ func (r *TasksRepository) Find(where *TaskModel, payload *Payload) (models []*Ta
 
 func (r *TasksRepository) Update(where *TaskModel, fields map[string]interface{}) error {
 	return r.db.Model(&TaskModel{}).Where(where).Updates(fields).Error
+}
+
+func (r *TasksRepository) Exists(where *TaskModel) bool {
+	return r.db.Select("id").First(&TaskModel{}, where).Error == nil
 }

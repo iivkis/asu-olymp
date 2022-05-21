@@ -6,8 +6,11 @@ import (
 )
 
 type ControllerV1 struct {
-	Auth       *AuthController
-	Tasks      *TasksController
+	Auth      *AuthController
+	Tasks     *TasksController
+	Questions *QuestionsController
+	Answers   *AnswersController
+
 	Middleware *MiddlewareController
 }
 
@@ -15,6 +18,8 @@ func NewControllerV1(repository *repository.Repository, authjwt *authjwt.AuthJWT
 	return &ControllerV1{
 		Auth:       NewAuthController(repository, authjwt),
 		Tasks:      NewTasksController(repository),
+		Questions:  NewQuestionsController(repository),
+		Answers:    NewAnswersController(repository),
 		Middleware: NewMiddlewareController(authjwt),
 	}
 }

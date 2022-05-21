@@ -5,6 +5,9 @@ import "gorm.io/gorm"
 type Repository struct {
 	Users *UsersRepository
 	Tasks *TasksRepository
+
+	Questions *QuestionsRepository
+	Answers   *AnswersRepository
 }
 
 func NewRepository() (r *Repository) {
@@ -20,6 +23,9 @@ func NewRepository() (r *Repository) {
 	return &Repository{
 		Users: NewUsersRepository(db),
 		Tasks: NewTasksRepository(db),
+
+		Questions: NewQuestionsRepository(db),
+		Answers:   NewAnswersRepository(db),
 	}
 }
 
@@ -27,5 +33,7 @@ func migration(db *gorm.DB) error {
 	return db.AutoMigrate(
 		&UserModel{},
 		&TaskModel{},
+		&QuestionModel{},
+		&AnswerModel{},
 	)
 }
