@@ -10,8 +10,9 @@ import (
 )
 
 /*default output struct*/
+//@Description Record ID
 type DefaultOut struct {
-	ID uint `json:"id"`
+	ID uint `json:"id" minimum:"0"`
 }
 
 /*wrapper*/

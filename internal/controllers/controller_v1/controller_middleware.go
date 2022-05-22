@@ -34,8 +34,8 @@ func (c *MiddlewareController) Bearer(mandatory bool) func(ctx *gin.Context) {
 }
 
 type PayloadQuery struct {
-	OffsetID uint `form:"offset_id" binding:"min=0"`
-	Limit    int  `form:"limit" binding:"min=0,max=1000"`
+	OffsetID uint `form:"offset_id" json:"offset_id" binding:"min=0"`
+	Limit    int  `form:"limit" json:"limit" binding:"min=0,max=1000"`
 }
 
 func (c *MiddlewareController) Payload(ctx *gin.Context) {

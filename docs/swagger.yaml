@@ -1,0 +1,165 @@
+basePath: /api/v1
+definitions:
+  controllerV1.AnswerPostBody:
+    properties:
+      question_id:
+        example: 77
+        minimum: 1
+        type: integer
+      value:
+        example: zero
+        maxLength: 1000
+        type: string
+    required:
+    - question_id
+    - value
+    type: object
+  controllerV1.AnswersPutBody:
+    properties:
+      value:
+        type: string
+    type: object
+  controllerV1.ControllerError:
+    properties:
+      code:
+        type: integer
+      description:
+        type: string
+    type: object
+  controllerV1.DefaultOut:
+    description: Record ID
+    properties:
+      id:
+        minimum: 0
+        type: integer
+    type: object
+  repository.AnswerModel:
+    properties:
+      id:
+        type: integer
+      question_id:
+        type: integer
+      value:
+        type: string
+    type: object
+host: localhost:8081
+info:
+  contact:
+    url: https://t.me/iivkis
+  title: ASU-Olymp API
+  version: 1.0-alpha
+paths:
+  /t/answers:
+    get:
+      description: Returns the created answers of the current user to the questions
+      parameters:
+      - in: query
+        minimum: 0
+        name: question_id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/repository.AnswerModel'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllerV1.ControllerError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllerV1.ControllerError'
+      summary: Get answers
+      tags:
+      - answers
+    post:
+      parameters:
+      - description: answer body
+        in: body
+        name: struct
+        required: true
+        schema:
+          $ref: '#/definitions/controllerV1.AnswerPostBody'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/controllerV1.DefaultOut'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllerV1.ControllerError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllerV1.ControllerError'
+      summary: Create new answer for question
+      tags:
+      - answers
+  /t/answers/{id}:
+    get:
+      parameters:
+      - description: answer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/repository.AnswerModel'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllerV1.ControllerError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllerV1.ControllerError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllerV1.ControllerError'
+      summary: Get one answers by ID
+      tags:
+      - answers
+    put:
+      parameters:
+      - description: answer body
+        in: body
+        name: struct
+        required: true
+        schema:
+          $ref: '#/definitions/controllerV1.AnswersPutBody'
+      - description: answer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllerV1.DefaultOut'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllerV1.ControllerError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllerV1.ControllerError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllerV1.ControllerError'
+      summary: Update answer fields
+      tags:
+      - answers
+swagger: "2.0"
