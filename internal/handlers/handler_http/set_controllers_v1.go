@@ -33,6 +33,8 @@ func (h *HandlerHttp) setControllersV1(router *gin.RouterGroup, c *controllerV1.
 			router := router.Group("questions")
 
 			router.GET("", c.Middleware.Bearer(false), c.Questions.Get)
+			router.GET("/:id", c.Middleware.Bearer(false), c.Questions.GetByID)
+
 			router.POST("", c.Middleware.Bearer(true), c.Questions.Post)
 			router.PUT("/:id", c.Middleware.Bearer(true), c.Questions.Put)
 		}
@@ -42,7 +44,10 @@ func (h *HandlerHttp) setControllersV1(router *gin.RouterGroup, c *controllerV1.
 			router := router.Group("answers")
 
 			router.GET("", c.Middleware.Bearer(true), c.Answers.Get)
+			router.GET("/:id", c.Middleware.Bearer(true), c.Answers.GetByID)
+
 			router.POST("", c.Middleware.Bearer(true), c.Answers.Post)
+			router.PUT("/:id", c.Middleware.Bearer(true), c.Answers.Put)
 		}
 	}
 }
