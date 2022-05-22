@@ -45,6 +45,10 @@ func (c *MiddlewareController) Payload(ctx *gin.Context) {
 		return
 	}
 
+	if query.Limit == 0 {
+		query.Limit = 1000
+	}
+
 	ctx.Set("payload", &repository.Payload{
 		OffsetID: query.OffsetID,
 		Limit:    query.Limit,

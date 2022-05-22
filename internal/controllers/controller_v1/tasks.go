@@ -10,13 +10,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type TaskOut struct {
-	ID      uint   `json:"id"`
-	Title   string `json:"title"`
-	Content string `json:"content"`
-	Author  uint   `json:"author"`
-}
-
 type TasksController struct {
 	repository *repository.Repository
 }
@@ -33,7 +26,6 @@ func (c *TasksController) Get(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, inWrap(ErrServer))
 		return
 	}
-
 	ctx.JSON(http.StatusOK, inWrap(models))
 }
 
@@ -96,6 +88,13 @@ func (c *TasksController) Put(ctx *gin.Context) {
 		return
 	}
 
+	claims, _ := getUserClaims(ctx)
+
+	if !c.repository.Tasks.Exists(&repository.TaskModel{ID: uint(id), AuthorID: claims.ID}) {
+		ctx.JSON(http.StatusNotFound, inWrap(ErrRecordNotFound))
+		return
+	}
+
 	var body TasksPutBody
 	if err := ctx.BindJSON(&body); err != nil {
 		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
@@ -109,12 +108,12 @@ func (c *TasksController) Put(ctx *gin.Context) {
 
 	if err := validator(fields, validatorRules{
 		"title": func(val interface{}) bool {
-			str := *val.(*string)
-			return len(str) > 1 && len(str) < 200
+			l := len(*val.(*string))
+			return l > 1 && l < 200
 		},
 		"content": func(val interface{}) bool {
-			str := *val.(*string)
-			return len(str) > 1 && len(str) < 2000
+			l := len(*val.(*string))
+			return l > 1 && l < 2000
 		},
 	}); err != nil {
 		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
