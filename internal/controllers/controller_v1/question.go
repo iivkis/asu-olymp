@@ -1,11 +1,13 @@
 package controllerV1
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/iivkis/asu-olymp/internal/repository"
+	"gorm.io/gorm"
 )
 
 type QuestionsController struct {
@@ -34,6 +36,28 @@ func (c *QuestionsController) Get(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, inWrap(models))
+}
+
+func (c *QuestionsController) GetByID(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
+		return
+	}
+
+	claims, _ := getUserClaims(ctx)
+
+	var model repository.QuestionModel
+	if err := c.repository.Questions.Cursor().First(&model, &repository.QuestionModel{ID: uint(id), AuthorID: claims.ID}).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			ctx.JSON(http.StatusNotFound, inWrap(ErrRecordNotFound))
+		} else {
+			ctx.JSON(http.StatusInternalServerError, inWrap(ErrServer))
+		}
+		return
+	}
+
+	ctx.JSON(http.StatusOK, inWrap(model))
 }
 
 type QuestionsPostBody struct {

@@ -1,10 +1,13 @@
 package controllerV1
 
 import (
+	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/iivkis/asu-olymp/internal/repository"
+	"gorm.io/gorm"
 )
 
 type AnswersController struct {
@@ -35,6 +38,28 @@ func (c *AnswersController) Get(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, inWrap(models))
+}
+
+func (c *AnswersController) GetByID(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
+		return
+	}
+
+	claims, _ := getUserClaims(ctx)
+
+	var model repository.AnswerModel
+	if err := c.repository.Answers.Cursor().First(&model, &repository.AnswerModel{ID: uint(id), AuthorID: claims.ID}).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			ctx.JSON(http.StatusNotFound, inWrap(ErrRecordNotFound))
+		} else {
+			ctx.JSON(http.StatusInternalServerError, inWrap(ErrServer))
+		}
+		return
+	}
+
+	ctx.JSON(http.StatusOK, inWrap(model))
 }
 
 type AnswerPostBody struct {
@@ -68,4 +93,50 @@ func (c *AnswersController) Post(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusCreated, inWrap(DefaultOut{ID: model.ID}))
+}
+
+type AnswersPutBody struct {
+	Value *string `json:"value"`
+}
+
+func (c *AnswersController) Put(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
+		return
+	}
+
+	claims, _ := getUserClaims(ctx)
+
+	if !c.repository.Answers.Exists(&repository.AnswerModel{ID: uint(id), AuthorID: claims.ID}) {
+		ctx.JSON(http.StatusNotFound, inWrap(ErrRecordNotFound))
+		return
+	}
+
+	var body AnswersPutBody
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
+		return
+	}
+
+	fields := map[string]interface{}{
+		"value": body.Value,
+	}
+
+	if err := validator(fields, validatorRules{
+		"value": func(val interface{}) bool {
+			l := len(*val.(*string))
+			return l >= 1 && l <= 1000
+		},
+	}); err != nil {
+		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
+		return
+	}
+
+	if err := c.repository.Answers.Update(&repository.AnswerModel{ID: uint(id)}, fields); err != nil {
+		ctx.JSON(http.StatusInternalServerError, inWrap(ErrServer))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, inWrap(DefaultOut{ID: uint(id)}))
 }
