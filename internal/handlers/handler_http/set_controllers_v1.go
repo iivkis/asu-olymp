@@ -21,33 +21,33 @@ func (h *HandlerHttp) setControllersV1(router *gin.RouterGroup, c *controllerV1.
 		{
 			router := router.Group("tasks")
 
-			router.GET("", c.Middleware.Bearer(false), c.Tasks.Get)
-			router.GET("/:id", c.Middleware.Bearer(false), c.Tasks.GetByID)
+			router.GET("", c.Middleware.WithApiKey(false), c.Tasks.Get)
+			router.GET("/:id", c.Middleware.WithApiKey(false), c.Tasks.GetByID)
 
-			router.POST("", c.Middleware.Bearer(true), c.Tasks.Post)
-			router.PUT("/:id", c.Middleware.Bearer(true), c.Tasks.Put)
+			router.POST("", c.Middleware.WithApiKey(true), c.Tasks.Post)
+			router.PUT("/:id", c.Middleware.WithApiKey(true), c.Tasks.Put)
 		}
 
 		//QUESTIONS
 		{
 			router := router.Group("questions")
 
-			router.GET("", c.Middleware.Bearer(false), c.Questions.Get)
-			router.GET("/:id", c.Middleware.Bearer(false), c.Questions.GetByID)
+			router.GET("", c.Middleware.WithApiKey(false), c.Questions.Get)
+			router.GET("/:id", c.Middleware.WithApiKey(false), c.Questions.GetByID)
 
-			router.POST("", c.Middleware.Bearer(true), c.Questions.Post)
-			router.PUT("/:id", c.Middleware.Bearer(true), c.Questions.Put)
+			router.POST("", c.Middleware.WithApiKey(true), c.Questions.Post)
+			router.PUT("/:id", c.Middleware.WithApiKey(true), c.Questions.Put)
 		}
 
 		//ANSWERS
 		{
 			router := router.Group("answers")
 
-			router.GET("", c.Middleware.Bearer(true), c.Answers.Get)
-			router.GET("/:id", c.Middleware.Bearer(true), c.Answers.GetByID)
+			router.GET("", c.Middleware.WithApiKey(true), c.Answers.Get)
+			router.GET("/:id", c.Middleware.WithApiKey(true), c.Answers.GetByID)
 
-			router.POST("", c.Middleware.Bearer(true), c.Answers.Post)
-			router.PUT("/:id", c.Middleware.Bearer(true), c.Answers.Put)
+			router.POST("", c.Middleware.WithApiKey(true), c.Answers.Post)
+			router.PUT("/:id", c.Middleware.WithApiKey(true), c.Answers.Put)
 		}
 	}
 }

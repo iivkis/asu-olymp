@@ -23,12 +23,14 @@ type AnswersGetQuery struct {
 }
 
 //@Summary Get answers
+//@Security ApiKey
 //@Tags answers
+//@ID GetAnswers
 //@Description Returns the created answers of the current user to the questions
-//@Param struct query AnswersGetQuery false "-"
-//@Success 200 {object} []repository.AnswerModel
-//@Failure 400 {object} ControllerError
-//@Failure 500 {object} ControllerError
+//@Param query query AnswersGetQuery false "-"
+//@Success 200 {object} wrap{data=[]repository.AnswerModel}
+//@Failure 400
+//@Failure 500
 //@Router /t/answers [get]
 func (c *AnswersController) Get(ctx *gin.Context) {
 	var query AnswersGetQuery
@@ -49,12 +51,14 @@ func (c *AnswersController) Get(ctx *gin.Context) {
 }
 
 //@Summary Get one answers by ID
+//@Security ApiKey
 //@Tags answers
+//@ID GetOneAnswer
 //@Param id path int true "answer ID"
-//@Success 200 {object} []repository.AnswerModel
-//@Failure 400 {object} ControllerError
-//@Failure 404 {object} ControllerError
-//@Failure 500 {object} ControllerError
+//@Success 200 {object} wrap{data=repository.AnswerModel}
+//@Failure 400
+//@Failure 404
+//@Failure 500
 //@Router /t/answers/{id} [get]
 func (c *AnswersController) GetByID(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
@@ -84,11 +88,13 @@ type AnswerPostBody struct {
 }
 
 //@Summary Create new answer for question
+//@Security ApiKey
 //@Tags answers
-//@Param struct body AnswerPostBody true "answer body"
-//@Success 201 {object} DefaultOut
-//@Failure 400 {object} ControllerError
-//@Failure 500 {object} ControllerError
+//@ID AddAnswer
+//@Param body body AnswerPostBody true "answer body"
+//@Success 201 {object} wrap{data=DefaultOut}
+//@Failure 400
+//@Failure 500
 //@Router /t/answers [post]
 func (c *AnswersController) Post(ctx *gin.Context) {
 	var body AnswerPostBody
@@ -123,13 +129,15 @@ type AnswersPutBody struct {
 }
 
 //@Summary Update answer fields
+//@Security ApiKey
 //@Tags answers
+//@ID UpdateAnswer
 //@Param struct body AnswersPutBody true "answer body"
 //@Param id path int true "answer ID"
-//@Success 200 {object} DefaultOut
-//@Failure 400 {object} ControllerError
-//@Failure 404 {object} ControllerError
-//@Failure 500 {object} ControllerError
+//@Success 200 {object} wrap{data=DefaultOut}
+//@Failure 400
+//@Failure 404
+//@Failure 500
 //@Router /t/answers/{id} [put]
 func (c *AnswersController) Put(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))

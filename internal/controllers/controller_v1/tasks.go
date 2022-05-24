@@ -2,6 +2,7 @@ package controllerV1
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -20,6 +21,12 @@ func NewTasksController(repository *repository.Repository) *TasksController {
 	}
 }
 
+//@Summary Get tasks
+//@Tags tasks
+//@ID GetTasks
+//@Success 200 {object} wrap{data=[]repository.TasksFindResult}
+//@Failure 500
+//@Router /t/tasks [get]
 func (c *TasksController) Get(ctx *gin.Context) {
 	models, err := c.repository.Tasks.Find(&repository.TaskModel{}, getPayload(ctx))
 	if err != nil {
@@ -29,6 +36,15 @@ func (c *TasksController) Get(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, inWrap(models))
 }
 
+//@Summary Get one task by ID
+//@Tags tasks
+//@ID GetOneTask
+//@Param id path int true "task ID"
+//@Success 200 {object} wrap{data=repository.TasksFindResult}
+//@Failure 400
+//@Failure 404
+//@Failure 500
+//@Router /t/tasks/{id} [get]
 func (c *TasksController) GetByID(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
@@ -36,8 +52,8 @@ func (c *TasksController) GetByID(ctx *gin.Context) {
 		return
 	}
 
-	var model *repository.TaskModel
-	if err := c.repository.Tasks.Cursor().First(&model, &repository.TaskModel{ID: uint(id)}).Error; err != nil {
+	model, err := c.repository.Tasks.FindByID(uint(id))
+	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			ctx.JSON(http.StatusNotFound, inWrap(ErrRecordNotFound))
 		} else {
@@ -53,6 +69,15 @@ type TasksPostBody struct {
 	Content string `json:"content" binding:"required,min=10,max=2000"`
 }
 
+//@Summary Create a new task
+//@Security ApiKey
+//@Tags tasks
+//@ID AddTask
+//@Param body body TasksPostBody true "task body"
+//@Success 201 {object} wrap{data=DefaultOut}
+//@Failure 400
+//@Failure 500
+//@Router /t/tasks [post]
 func (c *TasksController) Post(ctx *gin.Context) {
 	var body TasksPostBody
 	if err := ctx.ShouldBindJSON(&body); err != nil {
@@ -68,8 +93,9 @@ func (c *TasksController) Post(ctx *gin.Context) {
 		AuthorID: claims.ID,
 	}
 
-	if err := c.repository.Tasks.Cursor().Create(&model); err != nil {
+	if err := c.repository.Tasks.Cursor().Create(&model).Error; err != nil {
 		ctx.JSON(http.StatusInternalServerError, inWrap(ErrServer))
+		fmt.Println(err)
 		return
 	}
 
@@ -81,6 +107,17 @@ type TasksPutBody struct {
 	Content *string `json:"content"`
 }
 
+//@Summary Update task fields
+//@Security ApiKey
+//@Tags tasks
+//@ID UpdateTask
+//@Param body body TasksPutBody true "task body"
+//@Param id path int true "task ID"
+//@Success 200 {object} wrap{data=DefaultOut}
+//@Failure 400
+//@Failure 404
+//@Failure 500
+//@Router /t/tasks/{id} [put]
 func (c *TasksController) Put(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {

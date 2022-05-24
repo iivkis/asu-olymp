@@ -19,14 +19,22 @@ func NewAuthController(repository *repository.Repository, authjwt *authjwt.AuthJ
 	return &AuthController{repository: repository, authjwt: authjwt}
 }
 
-type authSignUpBody struct {
-	Email    string `json:"email" binding:"required,min=3,max=100"`
-	FullName string `json:"full_name" binding:"required,min=1,max=100"`
-	Password string `json:"password" binding:"required,min=4,max=50"`
+type AuthSignUpBody struct {
+	Email    string `json:"email" binding:"required,min=3,max=100" minLength:"3" maxLength:"100" example:"example@mail.ru"`
+	Password string `json:"password" binding:"required,min=4,max=50" minLength:"4" maxLength:"50" example:"qwerty27"`
+	FullName string `json:"full_name" binding:"required,min=1,max=100" minLength:"1" maxLength:"100" example:"Фёдоров И.С."`
 }
 
+//@Summary Create a new user profile
+//@Tags auth
+//@ID SignUp
+//@Param body body AuthSignUpBody true "sign up data"
+//@Success 201 {object} wrap{data=DefaultOut}
+//@Failure 400
+//@Failure 500
+//@Router /signUp [post]
 func (c *AuthController) SignUp(ctx *gin.Context) {
-	var body authSignUpBody
+	var body AuthSignUpBody
 	if err := ctx.ShouldBindJSON(&body); err != nil {
 		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
 		return
@@ -48,20 +56,28 @@ func (c *AuthController) SignUp(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, inWrap(model.ID))
+	ctx.JSON(http.StatusCreated, inWrap(DefaultOut{ID: model.ID}))
 }
 
-type authSignInBody struct {
-	Email    string `json:"email" binding:"required,min=3,max=200"`
-	Password string `json:"password" binding:"required,min=4,max=50"`
+type AuthSignInBody struct {
+	Email    string `json:"email" binding:"required,min=3,max=100" minLength:"3" maxLength:"100" example:"example@mail.ru"`
+	Password string `json:"password" binding:"required,min=4,max=50" minLength:"4" maxLength:"50" example:"qwerty27"`
 }
 
-type authSignInOut struct {
-	Token string `json:"token"`
+type AuthSignInOut struct {
+	Token string `json:"token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImlzcyI6ImFzdS1vbHltcCJ9.NPFZIvICrpfdqUlbr5vfvRMCHgbKj28eXmLjftWPjyc"`
 }
 
+//@Summary Sign in user profile
+//@Tags auth
+//@ID SignIn
+//@Param body body AuthSignInBody true "sign in data"
+//@Success 200 {object} wrap{data=AuthSignInOut}
+//@Failure 400
+//@Failure 500
+//@Router /signIn [post]
 func (c *AuthController) SignIn(ctx *gin.Context) {
-	var body authSignInBody
+	var body AuthSignInBody
 	if err := ctx.ShouldBindJSON(&body); err != nil {
 		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
 		return
@@ -87,7 +103,7 @@ func (c *AuthController) SignIn(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, inWrap(authSignInOut{
+	ctx.JSON(http.StatusOK, inWrap(AuthSignInOut{
 		Token: token,
 	}))
 }

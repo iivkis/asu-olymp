@@ -1,6 +1,7 @@
 package handlerHTTP
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/iivkis/asu-olymp/docs"
 	controllerV1 "github.com/iivkis/asu-olymp/internal/controllers/controller_v1"
@@ -31,6 +32,8 @@ func (h *HandlerHttp) Engine() *gin.Engine {
 }
 
 func (h *HandlerHttp) init() {
+	h.engine.Use(cors.Default())
+
 	//set api v1
 	h.setControllersV1(h.engine.Group("/api/v1"), h.cfg.ControllerV1)
 

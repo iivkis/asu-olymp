@@ -13,6 +13,14 @@ import (
 //@Contanct.Name ivkis
 //@Contact.Url https://t.me/iivkis
 
+//@Accept json
+//@Produce json
+
+//@SecurityDefinitions.ApiKey ApiKey
+//@In header
+//@Name Authorization
+//@Description JWT token for authorization
+
 type ControllerV1 struct {
 	Auth      *AuthController
 	Tasks     *TasksController

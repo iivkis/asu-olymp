@@ -19,9 +19,17 @@ func NewQuestionsController(repository *repository.Repository) *QuestionsControl
 }
 
 type QuestionsGetQuery struct {
-	TaskID uint `form:"task_id" binding:"min=0"`
+	TaskID uint `form:"task_id" json:"task_id" binding:"min=0"`
 }
 
+//@Summary Get questions
+//@Tags questions
+//@ID GetQuestions
+//@Param query query QuestionsGetQuery false "-"
+//@Success 200 {object} wrap{data=[]repository.QuestionModel}
+//@Failure 400
+//@Failure 500
+//@Router /t/questions [get]
 func (c *QuestionsController) Get(ctx *gin.Context) {
 	var query QuestionsGetQuery
 	if err := ctx.ShouldBindQuery(&query); err != nil {
@@ -31,13 +39,22 @@ func (c *QuestionsController) Get(ctx *gin.Context) {
 
 	models, err := c.repository.Questions.Find(&repository.QuestionModel{TaskID: query.TaskID}, getPayload(ctx))
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
+		ctx.JSON(http.StatusInternalServerError, inWrap(ErrServer))
 		return
 	}
 
 	ctx.JSON(http.StatusOK, inWrap(models))
 }
 
+//@Summary Get one question by ID
+//@Tags questions
+//@ID GetOneQuestion
+//@Param id path int true "question ID"
+//@Success 200 {object} wrap{data=repository.QuestionModel}
+//@Failure 400
+//@Failure 404
+//@Failure 500
+//@Router /t/questions/{id} [get]
 func (c *QuestionsController) GetByID(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
@@ -65,6 +82,15 @@ type QuestionsPostBody struct {
 	TaskID uint   `json:"task_id" binding:"min=1"`
 }
 
+//@Summary Create a new question for task
+//@Security ApiKey
+//@Tags questions
+//@ID AddQuestion
+//@Param body body QuestionsPostBody true "question body"
+//@Success 201 {object} wrap{data=DefaultOut}
+//@Failure 400
+//@Failure 500
+//@Router /t/questions [post]
 func (c *QuestionsController) Post(ctx *gin.Context) {
 	var body QuestionsPostBody
 	if err := ctx.ShouldBindJSON(&body); err != nil {
@@ -97,6 +123,17 @@ type QuestionsPutBody struct {
 	Text *string `json:"text"`
 }
 
+//@Summary Update question fields
+//@Security ApiKey
+//@Tags questions
+//@ID UpdateQuestion
+//@Param body body QuestionsPutBody true "question body"
+//@Param id path int true "question ID"
+//@Success 200 {object} wrap{data=DefaultOut}
+//@Failure 400
+//@Failure 404
+//@Failure 500
+//@Router /t/questions/{id} [put]
 func (c *QuestionsController) Put(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {

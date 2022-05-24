@@ -16,6 +16,7 @@ type DefaultOut struct {
 }
 
 /*wrapper*/
+//@Description Standard wrapper for responses
 type wrap struct {
 	Status bool        `json:"status"`
 	Data   interface{} `json:"data"`

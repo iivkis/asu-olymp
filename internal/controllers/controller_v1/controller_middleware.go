@@ -16,7 +16,7 @@ func NewMiddlewareController(authjwt *authjwt.AuthJWT) *MiddlewareController {
 	return &MiddlewareController{authjwt: authjwt}
 }
 
-func (c *MiddlewareController) Bearer(mandatory bool) func(ctx *gin.Context) {
+func (c *MiddlewareController) WithApiKey(mandatory bool) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		token := ctx.GetHeader("Authorization")
 		if token != "" {
