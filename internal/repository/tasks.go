@@ -54,7 +54,7 @@ func (r *TasksRepository) FindByID(id uint) (models *TasksFindResult, err error)
 		Select("task_models.id, task_models.title, task_models.content, task_models.solutions_count, task_models.author_id, user_models.full_name").
 		Joins("JOIN user_models ON user_models.id = task_models.author_id").
 		Where("task_models.id = ?", id).
-		Find(&models).Error
+		First(&models).Error
 	return
 }
 
