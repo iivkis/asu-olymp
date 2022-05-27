@@ -5,8 +5,9 @@ import "gorm.io/gorm"
 type TaskModel struct {
 	ID uint `gorm:"index:,unique" json:"id"`
 
-	Title   string `gorm:"size:200" json:"title"`
-	Content string `gorm:"size:2000" json:"content"`
+	Title       string `gorm:"size:200" json:"title"`
+	Content     string `gorm:"size:2000" json:"content"`
+	ShowCorrect bool   `json:"show_correct"`
 
 	SolutionsCount uint `json:"solutions_count"`
 

@@ -65,8 +65,9 @@ func (c *TasksController) GetByID(ctx *gin.Context) {
 }
 
 type TasksPostBody struct {
-	Title   string `json:"title" binding:"required,max=200"`
-	Content string `json:"content" binding:"required,min=10,max=2000"`
+	Title       string `json:"title" binding:"required,max=200"`
+	Content     string `json:"content" binding:"required,min=10,max=2000"`
+	ShowCorrect bool   `json:"show_correct"`
 }
 
 //@Summary Create a new task
@@ -103,8 +104,9 @@ func (c *TasksController) Post(ctx *gin.Context) {
 }
 
 type TasksPutBody struct {
-	Title   *string `json:"title"`
-	Content *string `json:"content"`
+	Title       *string `json:"title"`
+	Content     *string `json:"content"`
+	ShowCorrect *bool   `json:"show_correct"`
 }
 
 //@Summary Update task fields
@@ -139,8 +141,9 @@ func (c *TasksController) Put(ctx *gin.Context) {
 	}
 
 	fields := map[string]interface{}{
-		"title":   body.Title,
-		"content": body.Content,
+		"title":        body.Title,
+		"content":      body.Content,
+		"show_correct": body.ShowCorrect,
 	}
 
 	if err := validator(fields, validatorRules{
@@ -152,6 +155,7 @@ func (c *TasksController) Put(ctx *gin.Context) {
 			l := len(*val.(*string))
 			return l > 1 && l < 2000
 		},
+		"show_correct": func(val interface{}) bool { return true },
 	}); err != nil {
 		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
 		return

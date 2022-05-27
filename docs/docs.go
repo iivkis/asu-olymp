@@ -328,6 +328,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/t/check": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "tags": [
+                    "checking"
+                ],
+                "summary": "Check of correct answers",
+                "operationId": "CheckingAnswers",
+                "parameters": [
+                    {
+                        "description": "check answers body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllerV1.CheckingAnswersPostBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controllerV1.wrap"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/controllerV1.CheckingAnswersPostOut"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": ""
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/t/questions": {
             "get": {
                 "tags": [
@@ -806,6 +857,54 @@ const docTemplate = `{
                 }
             }
         },
+        "controllerV1.CheckingAnswersPostBody": {
+            "type": "object",
+            "properties": {
+                "answers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controllerV1.CheckingAnswersPostBodyFieldAnswer"
+                    }
+                },
+                "task_id": {
+                    "type": "integer",
+                    "minimum": 1
+                }
+            }
+        },
+        "controllerV1.CheckingAnswersPostBodyFieldAnswer": {
+            "type": "object",
+            "properties": {
+                "question_id": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "value": {
+                    "type": "string",
+                    "maxLength": 1000
+                }
+            }
+        },
+        "controllerV1.CheckingAnswersPostOut": {
+            "type": "object",
+            "properties": {
+                "num_of_correct": {
+                    "type": "integer"
+                },
+                "results": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "boolean"
+                    }
+                },
+                "show_correct": {
+                    "type": "boolean"
+                },
+                "task_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "controllerV1.DefaultOut": {
             "description": "Record ID",
             "type": "object",
@@ -852,6 +951,9 @@ const docTemplate = `{
                     "maxLength": 2000,
                     "minLength": 10
                 },
+                "show_correct": {
+                    "type": "boolean"
+                },
                 "title": {
                     "type": "string",
                     "maxLength": 200
@@ -863,6 +965,9 @@ const docTemplate = `{
             "properties": {
                 "content": {
                     "type": "string"
+                },
+                "show_correct": {
+                    "type": "boolean"
                 },
                 "title": {
                     "type": "string"

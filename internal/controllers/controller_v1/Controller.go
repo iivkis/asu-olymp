@@ -22,20 +22,22 @@ import (
 //@Description JWT token for authorization
 
 type ControllerV1 struct {
-	Auth      *AuthController
-	Tasks     *TasksController
-	Questions *QuestionsController
-	Answers   *AnswersController
+	Auth            *AuthController
+	Tasks           *TasksController
+	Questions       *QuestionsController
+	Answers         *AnswersController
+	CheckingAnswers *CheckingAnswersController
 
 	Middleware *MiddlewareController
 }
 
 func NewControllerV1(repository *repository.Repository, authjwt *authjwt.AuthJWT) *ControllerV1 {
 	return &ControllerV1{
-		Auth:       NewAuthController(repository, authjwt),
-		Tasks:      NewTasksController(repository),
-		Questions:  NewQuestionsController(repository),
-		Answers:    NewAnswersController(repository),
-		Middleware: NewMiddlewareController(authjwt),
+		Auth:            NewAuthController(repository, authjwt),
+		Tasks:           NewTasksController(repository),
+		Questions:       NewQuestionsController(repository),
+		Answers:         NewAnswersController(repository),
+		CheckingAnswers: NewCheckingAnswersController(repository),
+		Middleware:      NewMiddlewareController(authjwt),
 	}
 }

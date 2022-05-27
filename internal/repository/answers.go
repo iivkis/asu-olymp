@@ -1,6 +1,8 @@
 package repository
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type AnswerModel struct {
 	ID uint `gorm:"index:,unique" json:"id"`
@@ -37,4 +39,19 @@ func (r *AnswersRepository) Update(where *AnswerModel, fields map[string]interfa
 
 func (r *AnswersRepository) Exists(where *AnswerModel) bool {
 	return r.db.Select("id").First(&AnswerModel{}, where).Error == nil
+}
+
+func (r *AnswersRepository) FindAndTransformToMapByQuestionID(QuestionsID []uint) (m map[uint]*AnswerModel, err error) {
+	m = make(map[uint]*AnswerModel)
+
+	var answers []*AnswerModel
+	if err = r.db.Where("question_id IN ?", QuestionsID).Find(&answers).Error; err != nil {
+		return
+	}
+
+	for i := range answers {
+		m[answers[i].QuestionID] = answers[i]
+	}
+
+	return
 }

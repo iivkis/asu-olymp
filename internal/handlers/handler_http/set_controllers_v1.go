@@ -49,5 +49,11 @@ func (h *HandlerHttp) setControllersV1(router *gin.RouterGroup, c *controllerV1.
 			router.POST("", c.Middleware.WithApiKey(true), c.Answers.Post)
 			router.PUT("/:id", c.Middleware.WithApiKey(true), c.Answers.Put)
 		}
+
+		{
+			router := router.Group("check")
+			router.POST("", c.Middleware.WithApiKey(false), c.CheckingAnswers.Post)
+
+		}
 	}
 }

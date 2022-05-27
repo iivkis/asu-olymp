@@ -65,6 +65,38 @@ definitions:
     - full_name
     - password
     type: object
+  controllerV1.CheckingAnswersPostBody:
+    properties:
+      answers:
+        items:
+          $ref: '#/definitions/controllerV1.CheckingAnswersPostBodyFieldAnswer'
+        type: array
+      task_id:
+        minimum: 1
+        type: integer
+    type: object
+  controllerV1.CheckingAnswersPostBodyFieldAnswer:
+    properties:
+      question_id:
+        minimum: 1
+        type: integer
+      value:
+        maxLength: 1000
+        type: string
+    type: object
+  controllerV1.CheckingAnswersPostOut:
+    properties:
+      num_of_correct:
+        type: integer
+      results:
+        additionalProperties:
+          type: boolean
+        type: object
+      show_correct:
+        type: boolean
+      task_id:
+        type: integer
+    type: object
   controllerV1.DefaultOut:
     description: Record ID
     properties:
@@ -94,6 +126,8 @@ definitions:
         maxLength: 2000
         minLength: 10
         type: string
+      show_correct:
+        type: boolean
       title:
         maxLength: 200
         type: string
@@ -105,6 +139,8 @@ definitions:
     properties:
       content:
         type: string
+      show_correct:
+        type: boolean
       title:
         type: string
     type: object
@@ -332,6 +368,35 @@ paths:
       summary: Update answer fields
       tags:
       - answers
+  /t/check:
+    post:
+      operationId: CheckingAnswers
+      parameters:
+      - description: check answers body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controllerV1.CheckingAnswersPostBody'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllerV1.wrap'
+            - properties:
+                data:
+                  $ref: '#/definitions/controllerV1.CheckingAnswersPostOut'
+              type: object
+        "400":
+          description: ""
+        "500":
+          description: ""
+      security:
+      - ApiKey: []
+      summary: Check of correct answers
+      tags:
+      - checking
   /t/questions:
     get:
       operationId: GetQuestions
