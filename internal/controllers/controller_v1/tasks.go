@@ -2,7 +2,6 @@ package controllerV1
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -93,12 +92,12 @@ func (c *TasksController) Post(ctx *gin.Context) {
 		Title:       body.Title,
 		Content:     body.Content,
 		ShowCorrect: body.ShowCorrect,
+		IsPublic:    body.IsPublic,
 		AuthorID:    claims.ID,
 	}
 
 	if err := c.repository.Tasks.Cursor().Create(&model).Error; err != nil {
 		ctx.JSON(http.StatusInternalServerError, inWrap(ErrServer))
-		fmt.Println(err)
 		return
 	}
 
