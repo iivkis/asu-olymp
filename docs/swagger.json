@@ -16,6 +16,53 @@
     "host": "localhost:8081",
     "basePath": "/api/v1",
     "paths": {
+        "/cookie": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Get ApiKey by cookie",
+                "operationId": "FromCookie",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controllerV1.wrap"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/controllerV1.AuthFromCookieOut"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Delete cookie",
+                "operationId": "DeleteCookie",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/signIn": {
             "post": {
                 "tags": [
@@ -791,6 +838,14 @@
                 }
             }
         },
+        "controllerV1.AuthFromCookieOut": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
         "controllerV1.AuthSignInBody": {
             "type": "object",
             "required": [
@@ -943,6 +998,9 @@
                     "maxLength": 2000,
                     "minLength": 10
                 },
+                "is_public": {
+                    "type": "boolean"
+                },
                 "show_correct": {
                     "type": "boolean"
                 },
@@ -957,6 +1015,9 @@
             "properties": {
                 "content": {
                     "type": "string"
+                },
+                "is_public": {
+                    "type": "boolean"
                 },
                 "show_correct": {
                     "type": "boolean"
@@ -1018,6 +1079,12 @@
                 },
                 "id": {
                     "type": "integer"
+                },
+                "is_public": {
+                    "type": "boolean"
+                },
+                "show_correct": {
+                    "type": "boolean"
                 },
                 "solutions_count": {
                     "type": "integer"

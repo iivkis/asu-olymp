@@ -3,6 +3,7 @@ package controllerV1
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
@@ -83,7 +84,7 @@ func (c *AuthController) SignIn(ctx *gin.Context) {
 		return
 	}
 
-	user, err := c.repository.Users.SignUpByEmail(body.Email, body.Password)
+	user, err := c.repository.Users.SignInByEmail(body.Email, body.Password)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData))
 		return
@@ -103,7 +104,50 @@ func (c *AuthController) SignIn(ctx *gin.Context) {
 		return
 	}
 
+	http.SetCookie(ctx.Writer, &http.Cookie{
+		Name:     "apikey",
+		Value:    token,
+		Path:     "/",
+		MaxAge:   24 * 60 * 60,
+		HttpOnly: true,
+	})
+
 	ctx.JSON(http.StatusOK, inWrap(AuthSignInOut{
 		Token: token,
 	}))
+}
+
+type AuthFromCookieOut struct {
+	Token string `json:"token"`
+}
+
+//@Summary Get ApiKey by cookie
+//@Tags auth
+//@ID FromCookie
+//@Success 200 {object} wrap{data=AuthFromCookieOut}
+//@Failure 400
+//@Router /cookie [post]
+func (c *AuthController) FromCookie(ctx *gin.Context) {
+	apikey, err := ctx.Cookie("apikey")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, ErrIncorrectData.Add("cookie undefined"))
+		return
+	}
+	ctx.JSON(http.StatusOK, inWrap(AuthFromCookieOut{Token: apikey}))
+}
+
+//@Summary Delete cookie
+//@Tags auth
+//@ID DeleteCookie
+//@Success 200
+//@Router /cookie [delete]
+func (c *AuthController) DeleteCookie(ctx *gin.Context) {
+	http.SetCookie(ctx.Writer, &http.Cookie{
+		Name:     "apikey",
+		Value:    "",
+		Path:     "/",
+		MaxAge:   0,
+		Expires:  time.Unix(0, 0),
+		HttpOnly: true,
+	})
 }

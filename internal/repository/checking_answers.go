@@ -9,12 +9,11 @@ import (
 type CheckingAnswerModel struct {
 	ID uint `gorm:"index:,unique" json:"id"`
 
-	PercentOfCorret uint `json:"percent_of_correct"`
-
-	CreatedAt int64 `json:"created_at"`
+	PercentOfCorret uint  `json:"percent_of_correct"`
+	CreatedAt       int64 `json:"created_at"`
 
 	TaskID    uint      `json:"task_id"`
-	TaskModel TaskModel `gorm:"foreignKey:TaskID"`
+	TaskModel TaskModel `gorm:"foreignKey:TaskID" json:"-"`
 }
 
 func (m *CheckingAnswerModel) BeforeCreate(tx *gorm.DB) error {

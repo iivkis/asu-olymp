@@ -52,7 +52,7 @@ func (r *UsersRepository) Exists(where *UserModel) bool {
 	return r.db.Select("id").Where(where).First(&UserModel{}).Error == nil
 }
 
-func (r *UsersRepository) SignUpByEmail(email string, password string) (model *UserModel, err error) {
+func (r *UsersRepository) SignInByEmail(email string, password string) (model *UserModel, err error) {
 	if err = r.db.First(&model, &UserModel{Email: email}).Error; err != nil {
 		return
 	}

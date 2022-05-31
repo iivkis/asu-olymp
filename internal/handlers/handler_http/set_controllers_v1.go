@@ -10,6 +10,8 @@ func (h *HandlerHttp) setControllersV1(router *gin.RouterGroup, c *controllerV1.
 	{
 		router.POST("/signUp", c.Auth.SignUp)
 		router.POST("/signIn", c.Auth.SignIn)
+		router.POST("/cookie", c.Auth.FromCookie)
+		router.DELETE("/cookie", c.Auth.DeleteCookie)
 	}
 
 	//route with tasks methods

@@ -21,6 +21,11 @@ definitions:
       value:
         type: string
     type: object
+  controllerV1.AuthFromCookieOut:
+    properties:
+      token:
+        type: string
+    type: object
   controllerV1.AuthSignInBody:
     properties:
       email:
@@ -126,6 +131,8 @@ definitions:
         maxLength: 2000
         minLength: 10
         type: string
+      is_public:
+        type: boolean
       show_correct:
         type: boolean
       title:
@@ -139,6 +146,8 @@ definitions:
     properties:
       content:
         type: string
+      is_public:
+        type: boolean
       show_correct:
         type: boolean
       title:
@@ -179,6 +188,10 @@ definitions:
         type: string
       id:
         type: integer
+      is_public:
+        type: boolean
+      show_correct:
+        type: boolean
       solutions_count:
         type: integer
       title:
@@ -191,6 +204,34 @@ info:
   title: ASU-Olymp API
   version: 1.0-alpha
 paths:
+  /cookie:
+    delete:
+      operationId: DeleteCookie
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: ""
+      summary: Delete cookie
+      tags:
+      - auth
+    post:
+      operationId: FromCookie
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllerV1.wrap'
+            - properties:
+                data:
+                  $ref: '#/definitions/controllerV1.AuthFromCookieOut'
+              type: object
+        "400":
+          description: ""
+      summary: Get ApiKey by cookie
+      tags:
+      - auth
   /signIn:
     post:
       operationId: SignIn

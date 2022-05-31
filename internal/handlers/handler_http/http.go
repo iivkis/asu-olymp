@@ -32,7 +32,8 @@ func (h *HandlerHttp) Engine() *gin.Engine {
 }
 
 func (h *HandlerHttp) init() {
-	h.engine.Use(cors.Default())
+	//use corse
+	h.withCors()
 
 	//set api v1
 	h.setControllersV1(h.engine.Group("/api/v1"), h.cfg.ControllerV1)
@@ -40,4 +41,14 @@ func (h *HandlerHttp) init() {
 	//set swagger
 	docs.SwaggerInfo.Schemes = []string{"http"}
 	h.engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+}
+
+func (h *HandlerHttp) withCors() {
+	cfg := cors.DefaultConfig()
+
+	cfg.AllowHeaders = append(cfg.AllowHeaders, "Authorization")
+	cfg.AllowOrigins = append(cfg.AllowOrigins, "http://localhost")
+	cfg.AllowCredentials = true
+
+	h.engine.Use(cors.New(cfg))
 }

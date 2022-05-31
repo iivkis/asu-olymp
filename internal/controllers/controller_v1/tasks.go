@@ -28,7 +28,7 @@ func NewTasksController(repository *repository.Repository) *TasksController {
 //@Failure 500
 //@Router /t/tasks [get]
 func (c *TasksController) Get(ctx *gin.Context) {
-	models, err := c.repository.Tasks.Find(&repository.TaskModel{}, getPayload(ctx))
+	models, err := c.repository.Tasks.Find(&repository.TaskModel{IsPublic: true}, getPayload(ctx))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, inWrap(ErrServer))
 		return
@@ -68,6 +68,7 @@ type TasksPostBody struct {
 	Title       string `json:"title" binding:"required,max=200"`
 	Content     string `json:"content" binding:"required,min=10,max=2000"`
 	ShowCorrect bool   `json:"show_correct"`
+	IsPublic    bool   `json:"is_public"`
 }
 
 //@Summary Create a new task
@@ -89,9 +90,10 @@ func (c *TasksController) Post(ctx *gin.Context) {
 	claims, _ := getUserClaims(ctx)
 
 	model := repository.TaskModel{
-		Title:    body.Title,
-		Content:  body.Content,
-		AuthorID: claims.ID,
+		Title:       body.Title,
+		Content:     body.Content,
+		ShowCorrect: body.ShowCorrect,
+		AuthorID:    claims.ID,
 	}
 
 	if err := c.repository.Tasks.Cursor().Create(&model).Error; err != nil {
@@ -107,6 +109,7 @@ type TasksPutBody struct {
 	Title       *string `json:"title"`
 	Content     *string `json:"content"`
 	ShowCorrect *bool   `json:"show_correct"`
+	IsPublic    *bool   `json:"is_public"`
 }
 
 //@Summary Update task fields
@@ -144,6 +147,7 @@ func (c *TasksController) Put(ctx *gin.Context) {
 		"title":        body.Title,
 		"content":      body.Content,
 		"show_correct": body.ShowCorrect,
+		"is_public":    body.IsPublic,
 	}
 
 	if err := validator(fields, validatorRules{
@@ -156,6 +160,7 @@ func (c *TasksController) Put(ctx *gin.Context) {
 			return l > 1 && l < 2000
 		},
 		"show_correct": func(val interface{}) bool { return true },
+		"is_public":    func(val interface{}) bool { return true },
 	}); err != nil {
 		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
 		return

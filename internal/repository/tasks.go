@@ -5,9 +5,11 @@ import "gorm.io/gorm"
 type TaskModel struct {
 	ID uint `gorm:"index:,unique" json:"id"`
 
-	Title       string `gorm:"size:200" json:"title"`
-	Content     string `gorm:"size:2000" json:"content"`
-	ShowCorrect bool   `json:"show_correct"`
+	Title   string `gorm:"size:200" json:"title"`
+	Content string `gorm:"size:2000" json:"content"`
+
+	ShowCorrect bool `json:"show_correct"`
+	IsPublic    bool `json:"is_public"`
 
 	SolutionsCount uint `json:"solutions_count"`
 
@@ -29,10 +31,13 @@ func (r *TasksRepository) Cursor() *gorm.DB {
 }
 
 type TasksFindResult struct {
-	ID uint `gorm:"index:,unique" json:"id"`
+	ID uint `json:"id"`
 
-	Title   string `gorm:"size:200" json:"title"`
-	Content string `gorm:"size:2000" json:"content"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
+
+	ShowCorrect bool `json:"show_correct"`
+	IsPublic    bool `json:"is_public"`
 
 	SolutionsCount uint `json:"solutions_count"`
 
@@ -41,20 +46,21 @@ type TasksFindResult struct {
 }
 
 func (r *TasksRepository) Find(where *TaskModel, payload *Payload) (models []*TasksFindResult, err error) {
-	err = r.Cursor().
-		Select("task_models.id, task_models.title, task_models.content, task_models.solutions_count, task_models.author_id, user_models.full_name").
-		Joins("JOIN user_models ON user_models.id = task_models.author_id").
-		Where("task_models.id > ?", payload.OffsetID).
+	err = r.db.Table("task_models AS tm").
+		Select("tm.id, tm.title, tm.content, tm.show_correct, tm.is_public, tm.solutions_count, tm.author_id, um.full_name").
+		Joins("JOIN user_models AS um ON um.id = tm.author_id").
+		Where("tm.id > ?", payload.OffsetID).
+		Order("tm.id DESC").
 		Limit(payload.Limit).
 		Find(&models, where).Error
 	return
 }
 
 func (r *TasksRepository) FindByID(id uint) (models *TasksFindResult, err error) {
-	err = r.Cursor().
-		Select("task_models.id, task_models.title, task_models.content, task_models.solutions_count, task_models.author_id, user_models.full_name").
-		Joins("JOIN user_models ON user_models.id = task_models.author_id").
-		Where("task_models.id = ?", id).
+	err = r.Cursor().Table("task_models AS tm").
+		Select("tm.id, tm.title, tm.content, tm.show_correct, tm.is_public, tm.solutions_count, tm.author_id, um.full_name").
+		Joins("JOIN user_models AS um ON um.id = tm.author_id").
+		Where("tm.id = ?", id).
 		First(&models).Error
 	return
 }

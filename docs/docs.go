@@ -24,6 +24,53 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/cookie": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Get ApiKey by cookie",
+                "operationId": "FromCookie",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controllerV1.wrap"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/controllerV1.AuthFromCookieOut"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Delete cookie",
+                "operationId": "DeleteCookie",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/signIn": {
             "post": {
                 "tags": [
@@ -799,6 +846,14 @@ const docTemplate = `{
                 }
             }
         },
+        "controllerV1.AuthFromCookieOut": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
         "controllerV1.AuthSignInBody": {
             "type": "object",
             "required": [
@@ -951,6 +1006,9 @@ const docTemplate = `{
                     "maxLength": 2000,
                     "minLength": 10
                 },
+                "is_public": {
+                    "type": "boolean"
+                },
                 "show_correct": {
                     "type": "boolean"
                 },
@@ -965,6 +1023,9 @@ const docTemplate = `{
             "properties": {
                 "content": {
                     "type": "string"
+                },
+                "is_public": {
+                    "type": "boolean"
                 },
                 "show_correct": {
                     "type": "boolean"
@@ -1026,6 +1087,12 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                },
+                "is_public": {
+                    "type": "boolean"
+                },
+                "show_correct": {
+                    "type": "boolean"
                 },
                 "solutions_count": {
                     "type": "integer"
