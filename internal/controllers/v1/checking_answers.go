@@ -1,4 +1,4 @@
-package controllerV1
+package ctrlv1
 
 import (
 	"errors"
@@ -64,7 +64,7 @@ func (c *CheckingAnswersController) Post(ctx *gin.Context) {
 		return
 	}
 
-	questExistence, err := c.repository.Questions.HashmapOfExistence(&repository.QuestionModel{TaskID: body.TaskID})
+	questExistence, err := c.repository.Questions.MapOfExistence(&repository.QuestionModel{TaskID: body.TaskID})
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, inWrap(ErrServer))
 		return

@@ -1,11 +1,11 @@
-package controllerV1
+package ctrlv1
 
 import (
 	"fmt"
 	"reflect"
 
 	"github.com/gin-gonic/gin"
-	authjwt "github.com/iivkis/asu-olymp/internal/auth_jwt"
+	"github.com/iivkis/asu-olymp/internal/auth"
 	"github.com/iivkis/asu-olymp/internal/repository"
 )
 
@@ -31,9 +31,9 @@ func inWrap(data interface{}) *wrap {
 }
 
 /*getters from ctx*/
-func getUserClaims(ctx *gin.Context) (*authjwt.UserClaims, bool) {
+func getUserClaims(ctx *gin.Context) (*auth.UserClaims, bool) {
 	val, ok := ctx.Get("user_claims")
-	return val.(*authjwt.UserClaims), ok
+	return val.(*auth.UserClaims), ok
 }
 
 func getPayload(ctx *gin.Context) *repository.Payload {
@@ -56,8 +56,10 @@ func validator(m map[string]interface{}, v validatorRules) error {
 			}
 		}
 	}
+
 	if len(m) == 0 {
 		return fmt.Errorf("the number of updated fields is zero")
 	}
+
 	return nil
 }

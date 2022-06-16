@@ -1,4 +1,4 @@
-package controllerV1
+package ctrlv1
 
 import (
 	"errors"

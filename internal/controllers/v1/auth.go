@@ -1,4 +1,4 @@
-package controllerV1
+package ctrlv1
 
 import (
 	"fmt"
@@ -7,17 +7,17 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
-	authjwt "github.com/iivkis/asu-olymp/internal/auth_jwt"
+	"github.com/iivkis/asu-olymp/internal/auth"
 	"github.com/iivkis/asu-olymp/internal/repository"
 )
 
 type AuthController struct {
 	repository *repository.Repository
-	authjwt    *authjwt.AuthJWT
+	authjwt    *auth.AuthorizationJWT
 }
 
-func NewAuthController(repository *repository.Repository, authjwt *authjwt.AuthJWT) *AuthController {
-	return &AuthController{repository: repository, authjwt: authjwt}
+func NewAuthController(repository *repository.Repository, auth *auth.AuthorizationJWT) *AuthController {
+	return &AuthController{repository: repository, authjwt: auth}
 }
 
 type AuthSignUpBody struct {
@@ -90,7 +90,7 @@ func (c *AuthController) SignIn(ctx *gin.Context) {
 		return
 	}
 
-	claims := authjwt.UserClaims{
+	claims := auth.UserClaims{
 		ID: user.ID,
 		StandardClaims: jwt.StandardClaims{
 			Issuer: "asu-olymp",

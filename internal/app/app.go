@@ -1,22 +1,25 @@
 package app
 
 import (
-	authjwt "github.com/iivkis/asu-olymp/internal/auth_jwt"
-	controllerV1 "github.com/iivkis/asu-olymp/internal/controllers/controller_v1"
-	handlerHttp "github.com/iivkis/asu-olymp/internal/handlers/handler_http"
+	"fmt"
+
+	"github.com/iivkis/asu-olymp/config"
+	"github.com/iivkis/asu-olymp/internal/auth"
+	ctrlv1 "github.com/iivkis/asu-olymp/internal/controllers/v1"
+	httphr "github.com/iivkis/asu-olymp/internal/handlers/http"
 	"github.com/iivkis/asu-olymp/internal/repository"
 )
 
 func Launch() {
+	authjwt := auth.NewAuthorizationWithJWT(config.JWT_SECRET)
 
-	authjwt := authjwt.NewAuthJWT("AllYourBase")
 	repository := repository.NewRepository()
 
-	cv1 := controllerV1.NewControllerV1(repository, authjwt)
+	cv1 := ctrlv1.NewController(repository, authjwt)
 
-	handHttp := handlerHttp.NewHandlerHTTP(&handlerHttp.Config{
+	httpHandler := httphr.NewHandlerHTTP(&httphr.Config{
 		ControllerV1: cv1,
 	})
 
-	handHttp.Engine().Run(":8081")
+	httpHandler.Engine().Run(fmt.Sprintf(":%s", config.PORT))
 }

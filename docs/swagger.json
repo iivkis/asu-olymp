@@ -13,7 +13,7 @@
         },
         "version": "1.0-alpha"
     },
-    "host": "localhost:8081",
+    "host": "localhost:8080",
     "basePath": "/api/v1",
     "paths": {
         "/cookie": {
@@ -29,13 +29,13 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.AuthFromCookieOut"
+                                            "$ref": "#/definitions/ctrlv1.AuthFromCookieOut"
                                         }
                                     }
                                 }
@@ -56,9 +56,6 @@
                 "responses": {
                     "200": {
                         "description": ""
-                    },
-                    "400": {
-                        "description": ""
                     }
                 }
             }
@@ -77,7 +74,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.AuthSignInBody"
+                            "$ref": "#/definitions/ctrlv1.AuthSignInBody"
                         }
                     }
                 ],
@@ -87,13 +84,13 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.AuthSignInOut"
+                                            "$ref": "#/definitions/ctrlv1.AuthSignInOut"
                                         }
                                     }
                                 }
@@ -123,7 +120,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.AuthSignUpBody"
+                            "$ref": "#/definitions/ctrlv1.AuthSignUpBody"
                         }
                     }
                 ],
@@ -133,13 +130,13 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.DefaultOut"
+                                            "$ref": "#/definitions/ctrlv1.DefaultOut"
                                         }
                                     }
                                 }
@@ -182,7 +179,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
@@ -224,7 +221,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.AnswerPostBody"
+                            "$ref": "#/definitions/ctrlv1.AnswerPostBody"
                         }
                     }
                 ],
@@ -234,13 +231,13 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.DefaultOut"
+                                            "$ref": "#/definitions/ctrlv1.DefaultOut"
                                         }
                                     }
                                 }
@@ -283,7 +280,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
@@ -325,7 +322,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.AnswersPutBody"
+                            "$ref": "#/definitions/ctrlv1.AnswersPutBody"
                         }
                     },
                     {
@@ -342,13 +339,13 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.DefaultOut"
+                                            "$ref": "#/definitions/ctrlv1.DefaultOut"
                                         }
                                     }
                                 }
@@ -386,7 +383,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.CheckingAnswersPostBody"
+                            "$ref": "#/definitions/ctrlv1.CheckingAnswersPostBody"
                         }
                     }
                 ],
@@ -396,13 +393,13 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.CheckingAnswersPostOut"
+                                            "$ref": "#/definitions/ctrlv1.CheckingAnswersPostOut"
                                         }
                                     }
                                 }
@@ -439,7 +436,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
@@ -481,7 +478,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.QuestionsPostBody"
+                            "$ref": "#/definitions/ctrlv1.QuestionsPostBody"
                         }
                     }
                 ],
@@ -491,13 +488,13 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.DefaultOut"
+                                            "$ref": "#/definitions/ctrlv1.DefaultOut"
                                         }
                                     }
                                 }
@@ -535,7 +532,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
@@ -577,7 +574,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.QuestionsPutBody"
+                            "$ref": "#/definitions/ctrlv1.QuestionsPutBody"
                         }
                     },
                     {
@@ -594,13 +591,13 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.DefaultOut"
+                                            "$ref": "#/definitions/ctrlv1.DefaultOut"
                                         }
                                     }
                                 }
@@ -632,7 +629,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
@@ -671,7 +668,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.TasksPostBody"
+                            "$ref": "#/definitions/ctrlv1.TasksPostBody"
                         }
                     }
                 ],
@@ -681,13 +678,13 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.DefaultOut"
+                                            "$ref": "#/definitions/ctrlv1.DefaultOut"
                                         }
                                     }
                                 }
@@ -725,7 +722,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
@@ -767,7 +764,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.TasksPutBody"
+                            "$ref": "#/definitions/ctrlv1.TasksPutBody"
                         }
                     },
                     {
@@ -784,13 +781,13 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.DefaultOut"
+                                            "$ref": "#/definitions/ctrlv1.DefaultOut"
                                         }
                                     }
                                 }
@@ -811,7 +808,7 @@
         }
     },
     "definitions": {
-        "controllerV1.AnswerPostBody": {
+        "ctrlv1.AnswerPostBody": {
             "type": "object",
             "required": [
                 "question_id",
@@ -830,7 +827,7 @@
                 }
             }
         },
-        "controllerV1.AnswersPutBody": {
+        "ctrlv1.AnswersPutBody": {
             "type": "object",
             "properties": {
                 "value": {
@@ -838,7 +835,7 @@
                 }
             }
         },
-        "controllerV1.AuthFromCookieOut": {
+        "ctrlv1.AuthFromCookieOut": {
             "type": "object",
             "properties": {
                 "token": {
@@ -846,7 +843,7 @@
                 }
             }
         },
-        "controllerV1.AuthSignInBody": {
+        "ctrlv1.AuthSignInBody": {
             "type": "object",
             "required": [
                 "email",
@@ -867,7 +864,7 @@
                 }
             }
         },
-        "controllerV1.AuthSignInOut": {
+        "ctrlv1.AuthSignInOut": {
             "type": "object",
             "properties": {
                 "token": {
@@ -876,7 +873,7 @@
                 }
             }
         },
-        "controllerV1.AuthSignUpBody": {
+        "ctrlv1.AuthSignUpBody": {
             "type": "object",
             "required": [
                 "email",
@@ -904,13 +901,13 @@
                 }
             }
         },
-        "controllerV1.CheckingAnswersPostBody": {
+        "ctrlv1.CheckingAnswersPostBody": {
             "type": "object",
             "properties": {
                 "answers": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/controllerV1.CheckingAnswersPostBodyFieldAnswer"
+                        "$ref": "#/definitions/ctrlv1.CheckingAnswersPostBodyFieldAnswer"
                     }
                 },
                 "task_id": {
@@ -919,7 +916,7 @@
                 }
             }
         },
-        "controllerV1.CheckingAnswersPostBodyFieldAnswer": {
+        "ctrlv1.CheckingAnswersPostBodyFieldAnswer": {
             "type": "object",
             "properties": {
                 "question_id": {
@@ -932,7 +929,7 @@
                 }
             }
         },
-        "controllerV1.CheckingAnswersPostOut": {
+        "ctrlv1.CheckingAnswersPostOut": {
             "type": "object",
             "properties": {
                 "num_of_correct": {
@@ -952,7 +949,7 @@
                 }
             }
         },
-        "controllerV1.DefaultOut": {
+        "ctrlv1.DefaultOut": {
             "description": "Record ID",
             "type": "object",
             "properties": {
@@ -962,7 +959,7 @@
                 }
             }
         },
-        "controllerV1.QuestionsPostBody": {
+        "ctrlv1.QuestionsPostBody": {
             "type": "object",
             "required": [
                 "text"
@@ -978,7 +975,7 @@
                 }
             }
         },
-        "controllerV1.QuestionsPutBody": {
+        "ctrlv1.QuestionsPutBody": {
             "type": "object",
             "properties": {
                 "text": {
@@ -986,7 +983,7 @@
                 }
             }
         },
-        "controllerV1.TasksPostBody": {
+        "ctrlv1.TasksPostBody": {
             "type": "object",
             "required": [
                 "content",
@@ -1010,7 +1007,7 @@
                 }
             }
         },
-        "controllerV1.TasksPutBody": {
+        "ctrlv1.TasksPutBody": {
             "type": "object",
             "properties": {
                 "content": {
@@ -1027,7 +1024,7 @@
                 }
             }
         },
-        "controllerV1.wrap": {
+        "ctrlv1.wrap": {
             "description": "Standard wrapper for responses",
             "type": "object",
             "properties": {

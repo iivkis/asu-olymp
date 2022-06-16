@@ -1,22 +1,22 @@
-package controllerV1
+package ctrlv1
 
 import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	authjwt "github.com/iivkis/asu-olymp/internal/auth_jwt"
+	"github.com/iivkis/asu-olymp/internal/auth"
 	"github.com/iivkis/asu-olymp/internal/repository"
 )
 
 type MiddlewareController struct {
-	authjwt *authjwt.AuthJWT
+	authjwt *auth.AuthorizationJWT
 }
 
-func NewMiddlewareController(authjwt *authjwt.AuthJWT) *MiddlewareController {
+func NewMiddlewareController(authjwt *auth.AuthorizationJWT) *MiddlewareController {
 	return &MiddlewareController{authjwt: authjwt}
 }
 
-func (c *MiddlewareController) WithApiKey(mandatory bool) func(ctx *gin.Context) {
+func (c *MiddlewareController) ByApiKey(mandatory bool) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		token := ctx.GetHeader("Authorization")
 		if token != "" {

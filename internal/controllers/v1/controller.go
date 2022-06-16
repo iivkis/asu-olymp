@@ -1,14 +1,14 @@
-package controllerV1
+package ctrlv1
 
 import (
-	authjwt "github.com/iivkis/asu-olymp/internal/auth_jwt"
+	"github.com/iivkis/asu-olymp/internal/auth"
 	"github.com/iivkis/asu-olymp/internal/repository"
 )
 
 //@Title ASU-Olymp API
 //@Version 1.0-alpha
 //@BasePath /api/v1
-//@Host localhost:8081
+//@Host localhost:8080
 
 //@Contanct.Name ivkis
 //@Contact.Url https://t.me/iivkis
@@ -21,7 +21,7 @@ import (
 //@Name Authorization
 //@Description JWT token for authorization
 
-type ControllerV1 struct {
+type Controller struct {
 	Auth            *AuthController
 	Tasks           *TasksController
 	Questions       *QuestionsController
@@ -31,8 +31,8 @@ type ControllerV1 struct {
 	Middleware *MiddlewareController
 }
 
-func NewControllerV1(repository *repository.Repository, authjwt *authjwt.AuthJWT) *ControllerV1 {
-	return &ControllerV1{
+func NewController(repository *repository.Repository, authjwt *auth.AuthorizationJWT) *Controller {
+	return &Controller{
 		Auth:            NewAuthController(repository, authjwt),
 		Tasks:           NewTasksController(repository),
 		Questions:       NewQuestionsController(repository),

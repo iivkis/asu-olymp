@@ -1,24 +1,24 @@
-package authjwt
+package auth
 
 import (
 	"github.com/golang-jwt/jwt"
 )
 
-type AuthJWT struct {
+type AuthorizationJWT struct {
 	secret []byte
 }
 
-func NewAuthJWT(secret string) *AuthJWT {
-	return &AuthJWT{
+func NewAuthorizationWithJWT(secret string) *AuthorizationJWT {
+	return &AuthorizationJWT{
 		secret: []byte(secret),
 	}
 }
 
-func (j *AuthJWT) GenerateUserToken(claims *UserClaims) (string, error) {
+func (j *AuthorizationJWT) GenerateUserToken(claims *UserClaims) (string, error) {
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString(j.secret)
 }
 
-func (j *AuthJWT) ParseUserToken(t string) (claims *UserClaims, err error) {
+func (j *AuthorizationJWT) ParseUserToken(t string) (claims *UserClaims, err error) {
 	token, err := jwt.ParseWithClaims(t, &UserClaims{}, func(t *jwt.Token) (interface{}, error) {
 		return j.secret, nil
 	})

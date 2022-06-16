@@ -56,6 +56,8 @@ func (r *UsersRepository) SignInByEmail(email string, password string) (model *U
 	if err = r.db.First(&model, &UserModel{Email: email}).Error; err != nil {
 		return
 	}
+
 	err = bcrypt.CompareHashAndPassword([]byte(model.Password), []byte(password))
+
 	return
 }

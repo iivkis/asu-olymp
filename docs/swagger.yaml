@@ -2,7 +2,7 @@ basePath: /api/v1
 consumes:
 - application/json
 definitions:
-  controllerV1.AnswerPostBody:
+  ctrlv1.AnswerPostBody:
     properties:
       question_id:
         example: 77
@@ -16,17 +16,17 @@ definitions:
     - question_id
     - value
     type: object
-  controllerV1.AnswersPutBody:
+  ctrlv1.AnswersPutBody:
     properties:
       value:
         type: string
     type: object
-  controllerV1.AuthFromCookieOut:
+  ctrlv1.AuthFromCookieOut:
     properties:
       token:
         type: string
     type: object
-  controllerV1.AuthSignInBody:
+  ctrlv1.AuthSignInBody:
     properties:
       email:
         example: example@mail.ru
@@ -42,13 +42,13 @@ definitions:
     - email
     - password
     type: object
-  controllerV1.AuthSignInOut:
+  ctrlv1.AuthSignInOut:
     properties:
       token:
         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImlzcyI6ImFzdS1vbHltcCJ9.NPFZIvICrpfdqUlbr5vfvRMCHgbKj28eXmLjftWPjyc
         type: string
     type: object
-  controllerV1.AuthSignUpBody:
+  ctrlv1.AuthSignUpBody:
     properties:
       email:
         example: example@mail.ru
@@ -70,17 +70,17 @@ definitions:
     - full_name
     - password
     type: object
-  controllerV1.CheckingAnswersPostBody:
+  ctrlv1.CheckingAnswersPostBody:
     properties:
       answers:
         items:
-          $ref: '#/definitions/controllerV1.CheckingAnswersPostBodyFieldAnswer'
+          $ref: '#/definitions/ctrlv1.CheckingAnswersPostBodyFieldAnswer'
         type: array
       task_id:
         minimum: 1
         type: integer
     type: object
-  controllerV1.CheckingAnswersPostBodyFieldAnswer:
+  ctrlv1.CheckingAnswersPostBodyFieldAnswer:
     properties:
       question_id:
         minimum: 1
@@ -89,7 +89,7 @@ definitions:
         maxLength: 1000
         type: string
     type: object
-  controllerV1.CheckingAnswersPostOut:
+  ctrlv1.CheckingAnswersPostOut:
     properties:
       num_of_correct:
         type: integer
@@ -102,14 +102,14 @@ definitions:
       task_id:
         type: integer
     type: object
-  controllerV1.DefaultOut:
+  ctrlv1.DefaultOut:
     description: Record ID
     properties:
       id:
         minimum: 0
         type: integer
     type: object
-  controllerV1.QuestionsPostBody:
+  ctrlv1.QuestionsPostBody:
     properties:
       task_id:
         minimum: 1
@@ -120,12 +120,12 @@ definitions:
     required:
     - text
     type: object
-  controllerV1.QuestionsPutBody:
+  ctrlv1.QuestionsPutBody:
     properties:
       text:
         type: string
     type: object
-  controllerV1.TasksPostBody:
+  ctrlv1.TasksPostBody:
     properties:
       content:
         maxLength: 2000
@@ -142,7 +142,7 @@ definitions:
     - content
     - title
     type: object
-  controllerV1.TasksPutBody:
+  ctrlv1.TasksPutBody:
     properties:
       content:
         type: string
@@ -153,7 +153,7 @@ definitions:
       title:
         type: string
     type: object
-  controllerV1.wrap:
+  ctrlv1.wrap:
     description: Standard wrapper for responses
     properties:
       data: {}
@@ -197,7 +197,7 @@ definitions:
       title:
         type: string
     type: object
-host: localhost:8081
+host: localhost:8080
 info:
   contact:
     url: https://t.me/iivkis
@@ -210,8 +210,6 @@ paths:
       responses:
         "200":
           description: ""
-        "400":
-          description: ""
       summary: Delete cookie
       tags:
       - auth
@@ -222,10 +220,10 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/controllerV1.wrap'
+            - $ref: '#/definitions/ctrlv1.wrap'
             - properties:
                 data:
-                  $ref: '#/definitions/controllerV1.AuthFromCookieOut'
+                  $ref: '#/definitions/ctrlv1.AuthFromCookieOut'
               type: object
         "400":
           description: ""
@@ -241,16 +239,16 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/controllerV1.AuthSignInBody'
+          $ref: '#/definitions/ctrlv1.AuthSignInBody'
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/controllerV1.wrap'
+            - $ref: '#/definitions/ctrlv1.wrap'
             - properties:
                 data:
-                  $ref: '#/definitions/controllerV1.AuthSignInOut'
+                  $ref: '#/definitions/ctrlv1.AuthSignInOut'
               type: object
         "400":
           description: ""
@@ -268,16 +266,16 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/controllerV1.AuthSignUpBody'
+          $ref: '#/definitions/ctrlv1.AuthSignUpBody'
       responses:
         "201":
           description: Created
           schema:
             allOf:
-            - $ref: '#/definitions/controllerV1.wrap'
+            - $ref: '#/definitions/ctrlv1.wrap'
             - properties:
                 data:
-                  $ref: '#/definitions/controllerV1.DefaultOut'
+                  $ref: '#/definitions/ctrlv1.DefaultOut'
               type: object
         "400":
           description: ""
@@ -300,7 +298,7 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/controllerV1.wrap'
+            - $ref: '#/definitions/ctrlv1.wrap'
             - properties:
                 data:
                   items:
@@ -324,16 +322,16 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/controllerV1.AnswerPostBody'
+          $ref: '#/definitions/ctrlv1.AnswerPostBody'
       responses:
         "201":
           description: Created
           schema:
             allOf:
-            - $ref: '#/definitions/controllerV1.wrap'
+            - $ref: '#/definitions/ctrlv1.wrap'
             - properties:
                 data:
-                  $ref: '#/definitions/controllerV1.DefaultOut'
+                  $ref: '#/definitions/ctrlv1.DefaultOut'
               type: object
         "400":
           description: ""
@@ -358,7 +356,7 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/controllerV1.wrap'
+            - $ref: '#/definitions/ctrlv1.wrap'
             - properties:
                 data:
                   $ref: '#/definitions/repository.AnswerModel'
@@ -382,7 +380,7 @@ paths:
         name: struct
         required: true
         schema:
-          $ref: '#/definitions/controllerV1.AnswersPutBody'
+          $ref: '#/definitions/ctrlv1.AnswersPutBody'
       - description: answer ID
         in: path
         name: id
@@ -393,10 +391,10 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/controllerV1.wrap'
+            - $ref: '#/definitions/ctrlv1.wrap'
             - properties:
                 data:
-                  $ref: '#/definitions/controllerV1.DefaultOut'
+                  $ref: '#/definitions/ctrlv1.DefaultOut'
               type: object
         "400":
           description: ""
@@ -418,16 +416,16 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/controllerV1.CheckingAnswersPostBody'
+          $ref: '#/definitions/ctrlv1.CheckingAnswersPostBody'
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/controllerV1.wrap'
+            - $ref: '#/definitions/ctrlv1.wrap'
             - properties:
                 data:
-                  $ref: '#/definitions/controllerV1.CheckingAnswersPostOut'
+                  $ref: '#/definitions/ctrlv1.CheckingAnswersPostOut'
               type: object
         "400":
           description: ""
@@ -451,7 +449,7 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/controllerV1.wrap'
+            - $ref: '#/definitions/ctrlv1.wrap'
             - properties:
                 data:
                   items:
@@ -473,16 +471,16 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/controllerV1.QuestionsPostBody'
+          $ref: '#/definitions/ctrlv1.QuestionsPostBody'
       responses:
         "201":
           description: Created
           schema:
             allOf:
-            - $ref: '#/definitions/controllerV1.wrap'
+            - $ref: '#/definitions/ctrlv1.wrap'
             - properties:
                 data:
-                  $ref: '#/definitions/controllerV1.DefaultOut'
+                  $ref: '#/definitions/ctrlv1.DefaultOut'
               type: object
         "400":
           description: ""
@@ -507,7 +505,7 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/controllerV1.wrap'
+            - $ref: '#/definitions/ctrlv1.wrap'
             - properties:
                 data:
                   $ref: '#/definitions/repository.QuestionModel'
@@ -529,7 +527,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/controllerV1.QuestionsPutBody'
+          $ref: '#/definitions/ctrlv1.QuestionsPutBody'
       - description: question ID
         in: path
         name: id
@@ -540,10 +538,10 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/controllerV1.wrap'
+            - $ref: '#/definitions/ctrlv1.wrap'
             - properties:
                 data:
-                  $ref: '#/definitions/controllerV1.DefaultOut'
+                  $ref: '#/definitions/ctrlv1.DefaultOut'
               type: object
         "400":
           description: ""
@@ -564,7 +562,7 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/controllerV1.wrap'
+            - $ref: '#/definitions/ctrlv1.wrap'
             - properties:
                 data:
                   items:
@@ -584,16 +582,16 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/controllerV1.TasksPostBody'
+          $ref: '#/definitions/ctrlv1.TasksPostBody'
       responses:
         "201":
           description: Created
           schema:
             allOf:
-            - $ref: '#/definitions/controllerV1.wrap'
+            - $ref: '#/definitions/ctrlv1.wrap'
             - properties:
                 data:
-                  $ref: '#/definitions/controllerV1.DefaultOut'
+                  $ref: '#/definitions/ctrlv1.DefaultOut'
               type: object
         "400":
           description: ""
@@ -618,7 +616,7 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/controllerV1.wrap'
+            - $ref: '#/definitions/ctrlv1.wrap'
             - properties:
                 data:
                   $ref: '#/definitions/repository.TasksFindResult'
@@ -640,7 +638,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/controllerV1.TasksPutBody'
+          $ref: '#/definitions/ctrlv1.TasksPutBody'
       - description: task ID
         in: path
         name: id
@@ -651,10 +649,10 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/controllerV1.wrap'
+            - $ref: '#/definitions/ctrlv1.wrap'
             - properties:
                 data:
-                  $ref: '#/definitions/controllerV1.DefaultOut'
+                  $ref: '#/definitions/ctrlv1.DefaultOut'
               type: object
         "400":
           description: ""

@@ -37,13 +37,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.AuthFromCookieOut"
+                                            "$ref": "#/definitions/ctrlv1.AuthFromCookieOut"
                                         }
                                     }
                                 }
@@ -64,9 +64,6 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": ""
-                    },
-                    "400": {
-                        "description": ""
                     }
                 }
             }
@@ -85,7 +82,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.AuthSignInBody"
+                            "$ref": "#/definitions/ctrlv1.AuthSignInBody"
                         }
                     }
                 ],
@@ -95,13 +92,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.AuthSignInOut"
+                                            "$ref": "#/definitions/ctrlv1.AuthSignInOut"
                                         }
                                     }
                                 }
@@ -131,7 +128,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.AuthSignUpBody"
+                            "$ref": "#/definitions/ctrlv1.AuthSignUpBody"
                         }
                     }
                 ],
@@ -141,13 +138,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.DefaultOut"
+                                            "$ref": "#/definitions/ctrlv1.DefaultOut"
                                         }
                                     }
                                 }
@@ -190,7 +187,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
@@ -232,7 +229,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.AnswerPostBody"
+                            "$ref": "#/definitions/ctrlv1.AnswerPostBody"
                         }
                     }
                 ],
@@ -242,13 +239,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.DefaultOut"
+                                            "$ref": "#/definitions/ctrlv1.DefaultOut"
                                         }
                                     }
                                 }
@@ -291,7 +288,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
@@ -333,7 +330,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.AnswersPutBody"
+                            "$ref": "#/definitions/ctrlv1.AnswersPutBody"
                         }
                     },
                     {
@@ -350,13 +347,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.DefaultOut"
+                                            "$ref": "#/definitions/ctrlv1.DefaultOut"
                                         }
                                     }
                                 }
@@ -394,7 +391,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.CheckingAnswersPostBody"
+                            "$ref": "#/definitions/ctrlv1.CheckingAnswersPostBody"
                         }
                     }
                 ],
@@ -404,13 +401,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.CheckingAnswersPostOut"
+                                            "$ref": "#/definitions/ctrlv1.CheckingAnswersPostOut"
                                         }
                                     }
                                 }
@@ -447,7 +444,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
@@ -489,7 +486,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.QuestionsPostBody"
+                            "$ref": "#/definitions/ctrlv1.QuestionsPostBody"
                         }
                     }
                 ],
@@ -499,13 +496,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.DefaultOut"
+                                            "$ref": "#/definitions/ctrlv1.DefaultOut"
                                         }
                                     }
                                 }
@@ -543,7 +540,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
@@ -585,7 +582,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.QuestionsPutBody"
+                            "$ref": "#/definitions/ctrlv1.QuestionsPutBody"
                         }
                     },
                     {
@@ -602,13 +599,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.DefaultOut"
+                                            "$ref": "#/definitions/ctrlv1.DefaultOut"
                                         }
                                     }
                                 }
@@ -640,7 +637,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
@@ -679,7 +676,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.TasksPostBody"
+                            "$ref": "#/definitions/ctrlv1.TasksPostBody"
                         }
                     }
                 ],
@@ -689,13 +686,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.DefaultOut"
+                                            "$ref": "#/definitions/ctrlv1.DefaultOut"
                                         }
                                     }
                                 }
@@ -733,7 +730,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
@@ -775,7 +772,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllerV1.TasksPutBody"
+                            "$ref": "#/definitions/ctrlv1.TasksPutBody"
                         }
                     },
                     {
@@ -792,13 +789,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/controllerV1.wrap"
+                                    "$ref": "#/definitions/ctrlv1.wrap"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/controllerV1.DefaultOut"
+                                            "$ref": "#/definitions/ctrlv1.DefaultOut"
                                         }
                                     }
                                 }
@@ -819,7 +816,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "controllerV1.AnswerPostBody": {
+        "ctrlv1.AnswerPostBody": {
             "type": "object",
             "required": [
                 "question_id",
@@ -838,7 +835,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllerV1.AnswersPutBody": {
+        "ctrlv1.AnswersPutBody": {
             "type": "object",
             "properties": {
                 "value": {
@@ -846,7 +843,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllerV1.AuthFromCookieOut": {
+        "ctrlv1.AuthFromCookieOut": {
             "type": "object",
             "properties": {
                 "token": {
@@ -854,7 +851,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllerV1.AuthSignInBody": {
+        "ctrlv1.AuthSignInBody": {
             "type": "object",
             "required": [
                 "email",
@@ -875,7 +872,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllerV1.AuthSignInOut": {
+        "ctrlv1.AuthSignInOut": {
             "type": "object",
             "properties": {
                 "token": {
@@ -884,7 +881,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllerV1.AuthSignUpBody": {
+        "ctrlv1.AuthSignUpBody": {
             "type": "object",
             "required": [
                 "email",
@@ -912,13 +909,13 @@ const docTemplate = `{
                 }
             }
         },
-        "controllerV1.CheckingAnswersPostBody": {
+        "ctrlv1.CheckingAnswersPostBody": {
             "type": "object",
             "properties": {
                 "answers": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/controllerV1.CheckingAnswersPostBodyFieldAnswer"
+                        "$ref": "#/definitions/ctrlv1.CheckingAnswersPostBodyFieldAnswer"
                     }
                 },
                 "task_id": {
@@ -927,7 +924,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllerV1.CheckingAnswersPostBodyFieldAnswer": {
+        "ctrlv1.CheckingAnswersPostBodyFieldAnswer": {
             "type": "object",
             "properties": {
                 "question_id": {
@@ -940,7 +937,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllerV1.CheckingAnswersPostOut": {
+        "ctrlv1.CheckingAnswersPostOut": {
             "type": "object",
             "properties": {
                 "num_of_correct": {
@@ -960,7 +957,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllerV1.DefaultOut": {
+        "ctrlv1.DefaultOut": {
             "description": "Record ID",
             "type": "object",
             "properties": {
@@ -970,7 +967,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllerV1.QuestionsPostBody": {
+        "ctrlv1.QuestionsPostBody": {
             "type": "object",
             "required": [
                 "text"
@@ -986,7 +983,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllerV1.QuestionsPutBody": {
+        "ctrlv1.QuestionsPutBody": {
             "type": "object",
             "properties": {
                 "text": {
@@ -994,7 +991,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllerV1.TasksPostBody": {
+        "ctrlv1.TasksPostBody": {
             "type": "object",
             "required": [
                 "content",
@@ -1018,7 +1015,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllerV1.TasksPutBody": {
+        "ctrlv1.TasksPutBody": {
             "type": "object",
             "properties": {
                 "content": {
@@ -1035,7 +1032,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllerV1.wrap": {
+        "ctrlv1.wrap": {
             "description": "Standard wrapper for responses",
             "type": "object",
             "properties": {
@@ -1116,7 +1113,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0-alpha",
-	Host:             "localhost:8081",
+	Host:             "localhost:8080",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "ASU-Olymp API",

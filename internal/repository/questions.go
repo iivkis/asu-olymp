@@ -42,7 +42,7 @@ func (r *QuestionsRepository) Exists(where *QuestionModel) bool {
 	return r.db.Select("id").First(&QuestionModel{}, where).Error == nil
 }
 
-func (r *QuestionsRepository) HashmapOfExistence(where *QuestionModel) (m map[uint]bool, err error) {
+func (r *QuestionsRepository) MapOfExistence(where *QuestionModel) (m map[uint]bool, err error) {
 	m = make(map[uint]bool)
 
 	var q []QuestionModel

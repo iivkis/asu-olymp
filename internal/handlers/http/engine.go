@@ -1,4 +1,4 @@
-package handlerHTTP
+package httphr
 
 import "github.com/gin-gonic/gin"
 
