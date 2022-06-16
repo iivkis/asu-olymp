@@ -1,4 +1,4 @@
-package controllerV1
+package ctrlv1
 
 type ControllerError struct {
 	Code        uint16 `json:"code"`

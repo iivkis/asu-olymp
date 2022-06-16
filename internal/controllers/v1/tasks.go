@@ -1,4 +1,4 @@
-package controllerV1
+package ctrlv1
 
 import (
 	"errors"
@@ -20,8 +20,14 @@ func NewTasksController(repository *repository.Repository) *TasksController {
 	}
 }
 
+//@Summary Get tasks
+//@Tags tasks
+//@ID GetTasks
+//@Success 200 {object} wrap{data=[]repository.TasksFindResult}
+//@Failure 500
+//@Router /t/tasks [get]
 func (c *TasksController) Get(ctx *gin.Context) {
-	models, err := c.repository.Tasks.Find(&repository.TaskModel{}, getPayload(ctx))
+	models, err := c.repository.Tasks.Find(&repository.TaskModel{IsPublic: true}, getPayload(ctx))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, inWrap(ErrServer))
 		return
@@ -29,6 +35,15 @@ func (c *TasksController) Get(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, inWrap(models))
 }
 
+//@Summary Get one task by ID
+//@Tags tasks
+//@ID GetOneTask
+//@Param id path int true "task ID"
+//@Success 200 {object} wrap{data=repository.TasksFindResult}
+//@Failure 400
+//@Failure 404
+//@Failure 500
+//@Router /t/tasks/{id} [get]
 func (c *TasksController) GetByID(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
@@ -36,8 +51,8 @@ func (c *TasksController) GetByID(ctx *gin.Context) {
 		return
 	}
 
-	var model *repository.TaskModel
-	if err := c.repository.Tasks.Cursor().First(&model, &repository.TaskModel{ID: uint(id)}).Error; err != nil {
+	model, err := c.repository.Tasks.FindByID(uint(id))
+	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			ctx.JSON(http.StatusNotFound, inWrap(ErrRecordNotFound))
 		} else {
@@ -49,10 +64,21 @@ func (c *TasksController) GetByID(ctx *gin.Context) {
 }
 
 type TasksPostBody struct {
-	Title   string `json:"title" binding:"required,max=200"`
-	Content string `json:"content" binding:"required,min=10,max=2000"`
+	Title       string `json:"title" binding:"required,max=200"`
+	Content     string `json:"content" binding:"required,min=10,max=2000"`
+	ShowCorrect bool   `json:"show_correct"`
+	IsPublic    bool   `json:"is_public"`
 }
 
+//@Summary Create a new task
+//@Security ApiKey
+//@Tags tasks
+//@ID AddTask
+//@Param body body TasksPostBody true "task body"
+//@Success 201 {object} wrap{data=DefaultOut}
+//@Failure 400
+//@Failure 500
+//@Router /t/tasks [post]
 func (c *TasksController) Post(ctx *gin.Context) {
 	var body TasksPostBody
 	if err := ctx.ShouldBindJSON(&body); err != nil {
@@ -63,12 +89,14 @@ func (c *TasksController) Post(ctx *gin.Context) {
 	claims, _ := getUserClaims(ctx)
 
 	model := repository.TaskModel{
-		Title:    body.Title,
-		Content:  body.Content,
-		AuthorID: claims.ID,
+		Title:       body.Title,
+		Content:     body.Content,
+		ShowCorrect: body.ShowCorrect,
+		IsPublic:    body.IsPublic,
+		AuthorID:    claims.ID,
 	}
 
-	if err := c.repository.Tasks.Cursor().Create(&model); err != nil {
+	if err := c.repository.Tasks.Cursor().Create(&model).Error; err != nil {
 		ctx.JSON(http.StatusInternalServerError, inWrap(ErrServer))
 		return
 	}
@@ -77,10 +105,23 @@ func (c *TasksController) Post(ctx *gin.Context) {
 }
 
 type TasksPutBody struct {
-	Title   *string `json:"title"`
-	Content *string `json:"content"`
+	Title       *string `json:"title"`
+	Content     *string `json:"content"`
+	ShowCorrect *bool   `json:"show_correct"`
+	IsPublic    *bool   `json:"is_public"`
 }
 
+//@Summary Update task fields
+//@Security ApiKey
+//@Tags tasks
+//@ID UpdateTask
+//@Param body body TasksPutBody true "task body"
+//@Param id path int true "task ID"
+//@Success 200 {object} wrap{data=DefaultOut}
+//@Failure 400
+//@Failure 404
+//@Failure 500
+//@Router /t/tasks/{id} [put]
 func (c *TasksController) Put(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
@@ -102,8 +143,10 @@ func (c *TasksController) Put(ctx *gin.Context) {
 	}
 
 	fields := map[string]interface{}{
-		"title":   body.Title,
-		"content": body.Content,
+		"title":        body.Title,
+		"content":      body.Content,
+		"show_correct": body.ShowCorrect,
+		"is_public":    body.IsPublic,
 	}
 
 	if err := validator(fields, validatorRules{
@@ -115,6 +158,8 @@ func (c *TasksController) Put(ctx *gin.Context) {
 			l := len(*val.(*string))
 			return l > 1 && l < 2000
 		},
+		"show_correct": func(val interface{}) bool { return true },
+		"is_public":    func(val interface{}) bool { return true },
 	}); err != nil {
 		ctx.JSON(http.StatusBadRequest, inWrap(ErrIncorrectData.Add(err.Error())))
 		return

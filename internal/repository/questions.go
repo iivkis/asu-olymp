@@ -1,6 +1,8 @@
 package repository
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type QuestionModel struct {
 	ID   uint   `gorm:"index:,unique" json:"id"`
@@ -38,4 +40,18 @@ func (r *QuestionsRepository) Update(where *QuestionModel, fields map[string]int
 
 func (r *QuestionsRepository) Exists(where *QuestionModel) bool {
 	return r.db.Select("id").First(&QuestionModel{}, where).Error == nil
+}
+
+func (r *QuestionsRepository) MapOfExistence(where *QuestionModel) (m map[uint]bool, err error) {
+	m = make(map[uint]bool)
+
+	var q []QuestionModel
+	if err = r.db.Select("id").Find(&q, where).Error; err != nil {
+		return
+	}
+
+	for i := range q {
+		m[q[i].ID] = true
+	}
+	return
 }

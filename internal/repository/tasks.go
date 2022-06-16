@@ -5,9 +5,15 @@ import "gorm.io/gorm"
 type TaskModel struct {
 	ID uint `gorm:"index:,unique" json:"id"`
 
-	Title    string `gorm:"size:200" json:"title"`
-	Content  string `gorm:"size:2000" json:"content"`
-	AuthorID uint   `json:"author_id"`
+	Title   string `gorm:"size:200" json:"title"`
+	Content string `gorm:"size:2000" json:"content"`
+
+	ShowCorrect bool `json:"show_correct"`
+	IsPublic    bool `json:"is_public"`
+
+	SolutionsCount uint `json:"solutions_count"`
+
+	AuthorID uint `json:"author_id"`
 
 	UserModel UserModel `gorm:"foreignKey:AuthorID" json:"-"`
 }
@@ -24,8 +30,38 @@ func (r *TasksRepository) Cursor() *gorm.DB {
 	return r.db.Model(&TaskModel{})
 }
 
-func (r *TasksRepository) Find(where *TaskModel, payload *Payload) (models []*TaskModel, err error) {
-	err = r.db.Where("id > ?", payload.OffsetID).Limit(payload.Limit).Find(&models, where).Error
+type TasksFindResult struct {
+	ID uint `json:"id"`
+
+	Title   string `json:"title"`
+	Content string `json:"content"`
+
+	ShowCorrect bool `json:"show_correct"`
+	IsPublic    bool `json:"is_public"`
+
+	SolutionsCount uint `json:"solutions_count"`
+
+	AuthorID uint   `json:"author_id"`
+	FullName string `json:"author_name"`
+}
+
+func (r *TasksRepository) Find(where *TaskModel, payload *Payload) (models []*TasksFindResult, err error) {
+	err = r.db.Table("task_models AS tm").
+		Select("tm.id, tm.title, tm.content, tm.show_correct, tm.is_public, tm.solutions_count, tm.author_id, um.full_name").
+		Joins("JOIN user_models AS um ON um.id = tm.author_id").
+		Where("tm.id > ?", payload.OffsetID).
+		Order("tm.id DESC").
+		Limit(payload.Limit).
+		Find(&models, where).Error
+	return
+}
+
+func (r *TasksRepository) FindByID(id uint) (models *TasksFindResult, err error) {
+	err = r.Cursor().Table("task_models AS tm").
+		Select("tm.id, tm.title, tm.content, tm.show_correct, tm.is_public, tm.solutions_count, tm.author_id, um.full_name").
+		Joins("JOIN user_models AS um ON um.id = tm.author_id").
+		Where("tm.id = ?", id).
+		First(&models).Error
 	return
 }
 

@@ -1,0 +1,676 @@
+basePath: /api/v1
+consumes:
+- application/json
+definitions:
+  ctrlv1.AnswerPostBody:
+    properties:
+      question_id:
+        example: 77
+        minimum: 1
+        type: integer
+      value:
+        example: zero
+        maxLength: 1000
+        type: string
+    required:
+    - question_id
+    - value
+    type: object
+  ctrlv1.AnswersPutBody:
+    properties:
+      value:
+        type: string
+    type: object
+  ctrlv1.AuthFromCookieOut:
+    properties:
+      token:
+        type: string
+    type: object
+  ctrlv1.AuthSignInBody:
+    properties:
+      email:
+        example: example@mail.ru
+        maxLength: 100
+        minLength: 3
+        type: string
+      password:
+        example: qwerty27
+        maxLength: 50
+        minLength: 4
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  ctrlv1.AuthSignInOut:
+    properties:
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImlzcyI6ImFzdS1vbHltcCJ9.NPFZIvICrpfdqUlbr5vfvRMCHgbKj28eXmLjftWPjyc
+        type: string
+    type: object
+  ctrlv1.AuthSignUpBody:
+    properties:
+      email:
+        example: example@mail.ru
+        maxLength: 100
+        minLength: 3
+        type: string
+      full_name:
+        example: Фёдоров И.С.
+        maxLength: 100
+        minLength: 1
+        type: string
+      password:
+        example: qwerty27
+        maxLength: 50
+        minLength: 4
+        type: string
+    required:
+    - email
+    - full_name
+    - password
+    type: object
+  ctrlv1.CheckingAnswersPostBody:
+    properties:
+      answers:
+        items:
+          $ref: '#/definitions/ctrlv1.CheckingAnswersPostBodyFieldAnswer'
+        type: array
+      task_id:
+        minimum: 1
+        type: integer
+    type: object
+  ctrlv1.CheckingAnswersPostBodyFieldAnswer:
+    properties:
+      question_id:
+        minimum: 1
+        type: integer
+      value:
+        maxLength: 1000
+        type: string
+    type: object
+  ctrlv1.CheckingAnswersPostOut:
+    properties:
+      num_of_correct:
+        type: integer
+      results:
+        additionalProperties:
+          type: boolean
+        type: object
+      show_correct:
+        type: boolean
+      task_id:
+        type: integer
+    type: object
+  ctrlv1.DefaultOut:
+    description: Record ID
+    properties:
+      id:
+        minimum: 0
+        type: integer
+    type: object
+  ctrlv1.QuestionsPostBody:
+    properties:
+      task_id:
+        minimum: 1
+        type: integer
+      text:
+        maxLength: 1000
+        type: string
+    required:
+    - text
+    type: object
+  ctrlv1.QuestionsPutBody:
+    properties:
+      text:
+        type: string
+    type: object
+  ctrlv1.TasksPostBody:
+    properties:
+      content:
+        maxLength: 2000
+        minLength: 10
+        type: string
+      is_public:
+        type: boolean
+      show_correct:
+        type: boolean
+      title:
+        maxLength: 200
+        type: string
+    required:
+    - content
+    - title
+    type: object
+  ctrlv1.TasksPutBody:
+    properties:
+      content:
+        type: string
+      is_public:
+        type: boolean
+      show_correct:
+        type: boolean
+      title:
+        type: string
+    type: object
+  ctrlv1.wrap:
+    description: Standard wrapper for responses
+    properties:
+      data: {}
+      status:
+        type: boolean
+    type: object
+  repository.AnswerModel:
+    properties:
+      id:
+        type: integer
+      question_id:
+        type: integer
+      value:
+        type: string
+    type: object
+  repository.QuestionModel:
+    properties:
+      id:
+        type: integer
+      task_id:
+        type: integer
+      text:
+        type: string
+    type: object
+  repository.TasksFindResult:
+    properties:
+      author_id:
+        type: integer
+      author_name:
+        type: string
+      content:
+        type: string
+      id:
+        type: integer
+      is_public:
+        type: boolean
+      show_correct:
+        type: boolean
+      solutions_count:
+        type: integer
+      title:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    url: https://t.me/iivkis
+  title: ASU-Olymp API
+  version: 1.0-alpha
+paths:
+  /cookie:
+    delete:
+      operationId: DeleteCookie
+      responses:
+        "200":
+          description: ""
+      summary: Delete cookie
+      tags:
+      - auth
+    post:
+      operationId: FromCookie
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/ctrlv1.wrap'
+            - properties:
+                data:
+                  $ref: '#/definitions/ctrlv1.AuthFromCookieOut'
+              type: object
+        "400":
+          description: ""
+      summary: Get ApiKey by cookie
+      tags:
+      - auth
+  /signIn:
+    post:
+      operationId: SignIn
+      parameters:
+      - description: sign in data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ctrlv1.AuthSignInBody'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/ctrlv1.wrap'
+            - properties:
+                data:
+                  $ref: '#/definitions/ctrlv1.AuthSignInOut'
+              type: object
+        "400":
+          description: ""
+        "500":
+          description: ""
+      summary: Sign in user profile
+      tags:
+      - auth
+  /signUp:
+    post:
+      operationId: SignUp
+      parameters:
+      - description: sign up data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ctrlv1.AuthSignUpBody'
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/ctrlv1.wrap'
+            - properties:
+                data:
+                  $ref: '#/definitions/ctrlv1.DefaultOut'
+              type: object
+        "400":
+          description: ""
+        "500":
+          description: ""
+      summary: Create a new user profile
+      tags:
+      - auth
+  /t/answers:
+    get:
+      description: Returns the created answers of the current user to the questions
+      operationId: GetAnswers
+      parameters:
+      - in: query
+        minimum: 0
+        name: question_id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/ctrlv1.wrap'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/repository.AnswerModel'
+                  type: array
+              type: object
+        "400":
+          description: ""
+        "500":
+          description: ""
+      security:
+      - ApiKey: []
+      summary: Get answers
+      tags:
+      - answers
+    post:
+      operationId: AddAnswer
+      parameters:
+      - description: answer body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ctrlv1.AnswerPostBody'
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/ctrlv1.wrap'
+            - properties:
+                data:
+                  $ref: '#/definitions/ctrlv1.DefaultOut'
+              type: object
+        "400":
+          description: ""
+        "500":
+          description: ""
+      security:
+      - ApiKey: []
+      summary: Create new answer for question
+      tags:
+      - answers
+  /t/answers/{id}:
+    get:
+      operationId: GetOneAnswer
+      parameters:
+      - description: answer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/ctrlv1.wrap'
+            - properties:
+                data:
+                  $ref: '#/definitions/repository.AnswerModel'
+              type: object
+        "400":
+          description: ""
+        "404":
+          description: ""
+        "500":
+          description: ""
+      security:
+      - ApiKey: []
+      summary: Get one answers by ID
+      tags:
+      - answers
+    put:
+      operationId: UpdateAnswer
+      parameters:
+      - description: answer body
+        in: body
+        name: struct
+        required: true
+        schema:
+          $ref: '#/definitions/ctrlv1.AnswersPutBody'
+      - description: answer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/ctrlv1.wrap'
+            - properties:
+                data:
+                  $ref: '#/definitions/ctrlv1.DefaultOut'
+              type: object
+        "400":
+          description: ""
+        "404":
+          description: ""
+        "500":
+          description: ""
+      security:
+      - ApiKey: []
+      summary: Update answer fields
+      tags:
+      - answers
+  /t/check:
+    post:
+      operationId: CheckingAnswers
+      parameters:
+      - description: check answers body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ctrlv1.CheckingAnswersPostBody'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/ctrlv1.wrap'
+            - properties:
+                data:
+                  $ref: '#/definitions/ctrlv1.CheckingAnswersPostOut'
+              type: object
+        "400":
+          description: ""
+        "500":
+          description: ""
+      security:
+      - ApiKey: []
+      summary: Check of correct answers
+      tags:
+      - checking
+  /t/questions:
+    get:
+      operationId: GetQuestions
+      parameters:
+      - in: query
+        minimum: 0
+        name: task_id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/ctrlv1.wrap'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/repository.QuestionModel'
+                  type: array
+              type: object
+        "400":
+          description: ""
+        "500":
+          description: ""
+      summary: Get questions
+      tags:
+      - questions
+    post:
+      operationId: AddQuestion
+      parameters:
+      - description: question body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ctrlv1.QuestionsPostBody'
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/ctrlv1.wrap'
+            - properties:
+                data:
+                  $ref: '#/definitions/ctrlv1.DefaultOut'
+              type: object
+        "400":
+          description: ""
+        "500":
+          description: ""
+      security:
+      - ApiKey: []
+      summary: Create a new question for task
+      tags:
+      - questions
+  /t/questions/{id}:
+    get:
+      operationId: GetOneQuestion
+      parameters:
+      - description: question ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/ctrlv1.wrap'
+            - properties:
+                data:
+                  $ref: '#/definitions/repository.QuestionModel'
+              type: object
+        "400":
+          description: ""
+        "404":
+          description: ""
+        "500":
+          description: ""
+      summary: Get one question by ID
+      tags:
+      - questions
+    put:
+      operationId: UpdateQuestion
+      parameters:
+      - description: question body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ctrlv1.QuestionsPutBody'
+      - description: question ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/ctrlv1.wrap'
+            - properties:
+                data:
+                  $ref: '#/definitions/ctrlv1.DefaultOut'
+              type: object
+        "400":
+          description: ""
+        "404":
+          description: ""
+        "500":
+          description: ""
+      security:
+      - ApiKey: []
+      summary: Update question fields
+      tags:
+      - questions
+  /t/tasks:
+    get:
+      operationId: GetTasks
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/ctrlv1.wrap'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/repository.TasksFindResult'
+                  type: array
+              type: object
+        "500":
+          description: ""
+      summary: Get tasks
+      tags:
+      - tasks
+    post:
+      operationId: AddTask
+      parameters:
+      - description: task body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ctrlv1.TasksPostBody'
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/ctrlv1.wrap'
+            - properties:
+                data:
+                  $ref: '#/definitions/ctrlv1.DefaultOut'
+              type: object
+        "400":
+          description: ""
+        "500":
+          description: ""
+      security:
+      - ApiKey: []
+      summary: Create a new task
+      tags:
+      - tasks
+  /t/tasks/{id}:
+    get:
+      operationId: GetOneTask
+      parameters:
+      - description: task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/ctrlv1.wrap'
+            - properties:
+                data:
+                  $ref: '#/definitions/repository.TasksFindResult'
+              type: object
+        "400":
+          description: ""
+        "404":
+          description: ""
+        "500":
+          description: ""
+      summary: Get one task by ID
+      tags:
+      - tasks
+    put:
+      operationId: UpdateTask
+      parameters:
+      - description: task body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ctrlv1.TasksPutBody'
+      - description: task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/ctrlv1.wrap'
+            - properties:
+                data:
+                  $ref: '#/definitions/ctrlv1.DefaultOut'
+              type: object
+        "400":
+          description: ""
+        "404":
+          description: ""
+        "500":
+          description: ""
+      security:
+      - ApiKey: []
+      summary: Update task fields
+      tags:
+      - tasks
+produces:
+- application/json
+securityDefinitions:
+  ApiKey:
+    description: JWT token for authorization
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

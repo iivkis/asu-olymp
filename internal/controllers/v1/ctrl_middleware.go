@@ -1,22 +1,22 @@
-package controllerV1
+package ctrlv1
 
 import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	authjwt "github.com/iivkis/asu-olymp/internal/auth_jwt"
+	"github.com/iivkis/asu-olymp/internal/auth"
 	"github.com/iivkis/asu-olymp/internal/repository"
 )
 
 type MiddlewareController struct {
-	authjwt *authjwt.AuthJWT
+	authjwt *auth.AuthorizationJWT
 }
 
-func NewMiddlewareController(authjwt *authjwt.AuthJWT) *MiddlewareController {
+func NewMiddlewareController(authjwt *auth.AuthorizationJWT) *MiddlewareController {
 	return &MiddlewareController{authjwt: authjwt}
 }
 
-func (c *MiddlewareController) Bearer(mandatory bool) func(ctx *gin.Context) {
+func (c *MiddlewareController) ByApiKey(mandatory bool) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		token := ctx.GetHeader("Authorization")
 		if token != "" {
@@ -34,8 +34,8 @@ func (c *MiddlewareController) Bearer(mandatory bool) func(ctx *gin.Context) {
 }
 
 type PayloadQuery struct {
-	OffsetID uint `form:"offset_id" binding:"min=0"`
-	Limit    int  `form:"limit" binding:"min=0,max=1000"`
+	OffsetID uint `form:"offset_id" json:"offset_id" binding:"min=0"`
+	Limit    int  `form:"limit" json:"limit" binding:"min=0,max=1000"`
 }
 
 func (c *MiddlewareController) Payload(ctx *gin.Context) {
